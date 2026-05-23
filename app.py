@@ -1,186 +1,195 @@
 import streamlit as st
 import pandas as pd
-import plotly.express as px
-from streamlit_option_menu import option_menu
+import numpy as np
 
-# --- 1. PAGE INITIALIZATION ---
+# Page Layout configuration
 st.set_page_config(
-    page_title="Luxury Interiors",
-    page_icon="🏠",
+    page_title="Nala Lai | Premium Operations Command",
+    page_icon="⚜️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# --- 2. THEME STYLING ---
+# --- Executive Luxury CSS Injection ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap');
+    /* Dark Obsidian Background */
+    .main { 
+        background-color: #07090e; 
+    }
     
-    .main-header {
-        background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-        padding: 2rem;
-        border-radius: 20px;
-        text-align: center;
-        color: white;
-        margin-bottom: 2rem;
+    /* Clean up default Streamlit padding & clutter */
+    #MainMenu, footer, header {visibility: hidden;}
+    
+    /* Luxury Glassmorphism Panel Cards */
+    .luxury-card {
+        background: rgba(15, 20, 30, 0.65);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
+    .luxury-card:hover {
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Dynamic Threat Glow-borders */
+    .border-gold { border-top: 3px solid #D4AF37; }
+    .border-emerald { border-left: 4px solid #10b981; }
+    .border-amber { border-left: 4px solid #f59e0b; }
+    .border-crimson { border-left: 4px solid #ef4444; }
+    
+    /* Elegant Typography */
     .luxury-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 3rem;
-        margin: 0;
+        font-family: 'Helvetica Neue', Inter, sans-serif;
+        font-weight: 300;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #94a3b8;
+        font-size: 0.75rem;
     }
-    .subtitle {
-        font-family: 'Inter', sans-serif;
-        font-size: 1.2rem;
-        opacity: 0.9;
+    .luxury-value {
+        font-family: 'Helvetica Neue', Inter, sans-serif;
+        font-weight: 400;
+        letter-spacing: -0.03em;
+        font-size: 2.2rem;
+        color: #ffffff;
+        margin: 5px 0;
     }
-    .product-card {
-        background: #f8f9fa;
-        border-radius: 15px;
-        padding: 1.5rem;
-        margin: 0.5rem 0;
-        border: 1px solid #e9ecef;
-    }
-    .price-tag {
-        background: #ffd700;
-        color: #1a1a1a;
-        padding: 8px 16px;
-        border-radius: 20px;
-        font-weight: bold;
-        font-size: 1.2rem;
-        text-align: center;
+    
+    /* Custom Metric Tweaks */
+    div[data-testid="stMetricValue"] {
+        font-weight: 300 !important;
+        letter-spacing: -0.02em;
     }
     </style>
-""", unsafe_allow_html=True)
+""", unsafe_transform=True)
 
-# --- 3. PERSISTENT DATA STATE ---
-if 'cart' not in st.session_state:
-    st.session_state.cart = {}
+# --- Sidebar Controls ---
+st.sidebar.markdown("<h2 style='font-weight: 300; letter-spacing: 0.05em; color: #D4AF37;'>⚜️ SIMULATOR</h2>", unsafe_transform=True)
+st.sidebar.markdown("Fine-tune parameters to preview state-changes across the custom UI layer.")
+sim_rain = st.sidebar.slider("Simulated 6h Rain (mm)", 0.0, 45.0, 12.0)
+sim_water = st.sidebar.slider("Current Gauge Level (ft)", 2.0, 22.0, 8.5)
 
-# Product Catalog Dataset
-PRODUCTS = [
-    {"id": 1, "name": "Velvet Chesterfield Sofa", "price": 2999, "category": "sofas", "image": "🛋️", "stock": 12},
-    {"id": 2, "name": "Modern L-Shape Sofa", "price": 2499, "category": "sofas", "image": "🛋️", "stock": 8},
-    {"id": 3, "name": "Luxury Leather Sectional", "price": 4999, "category": "sofas", "image": "🛋️", "stock": 5},
-    {"id": 4, "name": "Marble Coffee Table", "price": 899, "category": "tables", "image": "☕", "stock": 15},
-    {"id": 5, "name": "Oak Dining Table", "price": 1799, "category": "tables", "image": "🍽️", "stock": 10},
-    {"id": 6, "name": "Glass Side Table", "price": 299, "category": "tables", "image": "☕", "stock": 20},
-    {"id": 7, "name": "Eames Lounge Chair", "price": 1299, "category": "chairs", "image": "🪑", "stock": 18},
-    {"id": 8, "name": "Velvet Armchair", "price": 799, "category": "chairs", "image": "🪑", "stock": 25},
-    {"id": 9, "name": "Bar Stool Set", "price": 599, "category": "chairs", "image": "🪑", "stock": 30},
-    {"id": 10, "name": "Crystal Chandelier", "price": 2499, "category": "lighting", "image": "💡", "stock": 6},
-    {"id": 11, "name": "Modern Floor Lamp", "price": 399, "category": "lighting", "image": "💡", "stock": 22},
-    {"id": 12, "name": "Wall Sconces (Pair)", "price": 299, "category": "lighting", "image": "💡", "stock": 15},
-    {"id": 13, "name": "Persian Rug 8x10", "price": 2999, "category": "decor", "image": "🧳", "stock": 4},
-    {"id": 14, "name": "Wall Art Set", "price": 599, "category": "decor", "image": "🎨", "stock": 12},
-    {"id": 15, "name": "Marble Vase", "price": 199, "category": "decor", "image": "🪴", "stock": 35}
-]
+# Strategic Status Matrix
+if sim_rain > 20 or sim_water > 15:
+    risk_class, risk_label, risk_color = "border-crimson", "CRITICAL THREAT EVENT", "#ef4444"
+    risk_msg = "Disaster vectors active. Evacuation metrics achieved for Rawalpindi Sectors."
+elif sim_rain > 8 or sim_water > 9:
+    risk_class, risk_label, risk_color = "border-amber", "ELEVATED ALERT LEVEL", "#f59e0b"
+    risk_msg = "Hydrological capacity narrowing near Katarian Bridge. Continuous monitoring."
+else:
+    risk_class, risk_label, risk_color = "border-emerald", "OPERATIONAL STATUS: NOMINAL", "#10b981"
+    risk_msg = "Channels operating inside safe variances. No immediate hydrological distress."
 
-# Calculate Shopping Aggregations Safely
-cart_item_count = sum(st.session_state.cart.values())
-cart_total_price = sum(next(p['price'] for p in PRODUCTS if p['id'] == pid) * qty for pid, qty in st.session_state.cart.items())
-
-# --- 4. NAVIGATION BAR ---
-with st.sidebar:
-    st.markdown("## 🏠 Navigation")
-    selected = option_menu(
-        menu_title=None,
-        options=["Catalog", "Cart", "Checkout", "Dashboard"],
-        icons=["house", "cart", "credit-card", "bar-chart"],
-        default_index=0
-    )
-
-# --- 5. HEADER BRANDING ---
-st.markdown("""
-    <div class="main-header">
-        <h1 class="luxury-title">Luxury Interiors</h1>
-        <p class="subtitle">Premium Furniture & Home Decor for Discerning Tastes</p>
+# --- Elegant Header Architecture ---
+st.markdown(f"""
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 0 40px 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 35px;">
+        <div>
+            <h1 style="font-weight: 200; font-size: 2.2rem; letter-spacing: 0.1em; color: #ffffff; margin: 0; text-transform: uppercase;">Nala Lai Intelligence</h1>
+            <p style="color: #64748b; font-size: 0.9rem; letter-spacing: 0.05em; margin: 5px 0 0 0;">RAWALPINDI, PAKISTAN — COGNITIVE RISK ENGINE</p>
+        </div>
+        <div style="text-align: right;">
+            <span class="luxury-title">System Pulse</span>
+            <p style="color: #D4AF37; font-size: 0.9rem; font-weight: 400; margin: 5px 0 0 0; letter-spacing: 0.05em;">● LIVE ENGINES SYNCHRONIZED</p>
+        </div>
     </div>
-""", unsafe_allow_html=True)
+""", unsafe_transform=True)
 
-# --- 6. TOP APP METRICS ---
-m1, m2, m3, m4 = st.columns(4)
-m1.metric("Total Unique Items", len(PRODUCTS))
-m2.metric("Items in Cart", cart_item_count)
-m3.metric("Current Total", f"${cart_total_price:,.2f}")
-m4.metric("Total Warehouse Stock", sum(p['stock'] for p in PRODUCTS))
-st.markdown("---")
+# --- Top Level Alert Banner (Executive Interface) ---
+st.markdown(f"""
+    <div class="luxury-card {risk_class}">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div style="flex: 1; min-width: 300px;">
+                <span class="luxury-title" style="color: {risk_color}; font-weight: 600;">System Assessment Matrix</span>
+                <div style="font-size: 1.6rem; font-weight: 300; color: #ffffff; margin: 5px 0; letter-spacing: 0.02em;">{risk_label}</div>
+                <p style="margin: 0; color: #94a3b8; font-size: 0.95rem; font-weight: 300;">{risk_msg}</p>
+            </div>
+            <div style="padding-left: 30px; border-left: 1px solid rgba(255,255,255,0.05); text-align: left; min-width: 200px;">
+                <span class="luxury-title">6H Probability</span>
+                <div class="luxury-value" style="color: #D4AF37; font-weight: 300;">{min(100, int((sim_rain/45)*100))}%</div>
+            </div>
+        </div>
+    </div>
+""", unsafe_transform=True)
 
-# --- 7. APPLICATIVE INTERFACE CORE ROUTING ---
-if selected == "Catalog":
-    st.header("✨ Premium Collection")
+# --- Performance Indicators Matrix ---
+m_col1, m_col2, m_col3, m_col4 = st.columns(4)
+
+with m_col1:
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.metric(label="🌧️ 6H PRECIPITATION INTENSITY", value=f"{sim_rain} mm", delta="-1.4 mm / hr")
+    st.markdown("""</div>""", unsafe_transform=True)
+
+with m_col2:
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.metric(label="📏 CHANNEL GAUGE DEPTH", value=f"{sim_water} ft", delta="+0.8 ft (Surging)", delta_color="inverse")
+    st.markdown("""</div>""", unsafe_transform=True)
+
+with m_col3:
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.metric(label="⚡ DISCHARGE VELOCITY", value="4.1 m/s", delta="Averaged")
+    st.markdown("""</div>""", unsafe_transform=True)
+
+with m_col4:
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.metric(label="🛰️ LOGISTICS NETWORK", value="100%", delta="14 Nodes Operational")
+    st.markdown("""</div>""", unsafe_transform=True)
+
+# --- Visual Infrastructure Segment ---
+layout_col1, layout_col2 = st.columns([1.3, 1])
+
+with layout_col1:
+    st.markdown("<p class='luxury-title' style='margin-bottom: 15px;'>📍 Spatial Telemetry Mapping</p>", unsafe_transform=True)
+    # Generate balanced point clusters surrounding Nala Lai channels
+    map_data = pd.DataFrame(
+        np.random.randn(6, 2) / [190, 190] + [33.5973, 73.0479],
+        columns=['lat', 'lon']
+    )
+    st.map(map_data, use_container_width=True)
+
+with layout_col2:
+    st.markdown("<p class='luxury-title' style='margin-bottom: 15px;'>📹 Deep-Neural Surveillance Feeds</p>", unsafe_transform=True)
     
-    # Filter Controls
-    f_col1, f_col2 = st.columns([2, 1])
-    with f_col1:
-        search_query = st.text_input("🔍 Search our inventory...", "").strip().lower()
-    with f_col2:
-        price_bounds = st.slider("💰 Price Window ($)", 0, 5000, (0, 5000))
-
-    # Real-Time Data Filtration
-    filtered = [
-        p for p in PRODUCTS 
-        if (not search_query or search_query in p['name'].lower()) and 
-           (price_bounds[0] <= p['price'] <= price_bounds[1])
-    ]
-
-    # Category Separation Tabs
-    t_sofa, t_table, t_chair, t_light, t_decor = st.tabs(["🛋️ Sofas", "☕ Tables", "🪑 Chairs", "💡 Lighting", "🎨 Decor"])
-    categories = {"sofas": t_sofa, "tables": t_table, "chairs": t_chair, "lighting": t_light, "decor": t_decor}
-
-    for cat_slug, tab_obj in categories.items():
-        with tab_obj:
-            cat_items = [p for p in filtered if p['category'] == cat_slug]
-            if not cat_items:
-                st.info("No items match your selected filter parameters in this category.")
-            for item in cat_items:
-                with st.container():
-                    c1, c2, c3 = st.columns([1, 4, 2])
-                    c1.markdown(f"## {item['image']}")
-                    c2.markdown(f'<div class="product-card"><h3>{item["name"]}</h3><p>Availability: <b>{item["stock"]} units left</b></p></div>', unsafe_allow_html=True)
-                    with c3:
-                        st.markdown(f'<div class="price-tag">${item["price"]:,.2f}</div>', unsafe_allow_html=True)
-                        if st.button("Add To Cart", key=f"btn_add_{item['id']}", use_container_width=True):
-                            st.session_state.cart[item['id']] = st.session_state.cart.get(item['id'], 0) + 1
-                            st.toast(f"Added {item['name']} to cart!")
-                            st.rerun()
-
-elif selected == "Cart":
-    st.header("🛒 Your Shopping Cart")
-    if not st.session_state.cart:
-        st.info("Your shopping cart is currently empty.")
-    else:
-        for pid, qty in list(st.session_state.cart.items()):
-            item_details = next(p for p in PRODUCTS if p['id'] == pid)
-            cc1, cc2, cc3, cc4 = st.columns([3, 1, 1, 1])
-            cc1.write(f"**{item_details['name']}**")
-            cc2.write(f"Quantity: {qty}")
-            cc3.write(f"${item_details['price'] * qty:,.2f}")
-            if cc4.button("❌ Remove", key=f"del_{pid}"):
-                del st.session_state.cart[pid]
-                st.rerun()
-
-elif selected == "Checkout":
-    st.header("💳 Complete Your Order")
-    if not st.session_state.cart:
-        st.warning("Your cart is empty. Please add products before checking out.")
-    else:
-        st.subheader(f"Grand Total Bill: ${cart_total_price:,.2f}")
-        if st.button("Confirm and Pay", type="primary", use_container_width=True):
-            st.session_state.cart = {}
-            st.balloons()
-            st.success("Thank you! Your order has been securely processed.")
-            st.rerun()
-
-elif selected == "Dashboard":
-    st.header("📊 Inventory & Business Analytics")
-    df = pd.DataFrame(PRODUCTS)
+    feed_tab1, feed_tab2 = st.tabs(["🔒 STATION 01: KATARIAN", "🔒 STATION 02: GANJMANDI"])
     
-    fig_scatter = px.scatter(df, x='price', y='stock', size='price', color='category', hover_name='name', title="Price vs Stock Inventory Scatter")
-    st.plotly_chart(fig_scatter, use_container_width=True)
-    
-    col_g1, col_g2 = st.columns(2)
-    with col_g1:
-        st.plotly_chart(px.pie(df, names='category', values='stock', title="Total Stock Volume Breakdown"), use_container_width=True)
-    with col_g2:
-        st.plotly_chart(px.bar(df, x='category', y='price', color='category', title="Average Valuation Profiles"), use_container_width=True)
+    with feed_tab1:
+        st.markdown(f"""
+            <div style="background-color: #0b0f17; border-radius: 8px; height: 260px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid rgba(212, 175, 55, 0.15); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 15px; left: 15px; display: flex; align-items: center; gap: 8px;">
+                    <span style="height: 8px; width: 8px; background-color: {risk_color}; border-radius: 50%; display: inline-block;"></span>
+                    <span style="color: #64748b; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em;">CV CORE ENGAGED</span>
+                </div>
+                <span style="font-size: 2.5rem; opacity: 0.35;">🌊</span>
+                <p style="color: #64748b; font-size: 0.85rem; letter-spacing: 0.03em; margin-top: 15px; font-weight: 300;">Raw Video Processing Matrix</p>
+                <p style="color: {risk_color}; font-size: 0.9rem; font-weight: 400; letter-spacing: 0.02em; margin: 3px 0 0 0;">
+                    {"⚠️ ALERT: ANOMALOUS RADIAL PATTERNS / HUMAN DISCOVERED" if sim_water > 14 else "✓ NO CRITICAL INFRASTRUCTURE DEFECTS"}
+                </p>
+            </div>
+        """, unsafe_transform=True)
+        
+    with feed_tab2:
+        st.markdown("""
+            <div style="background-color: #0b0f17; border-radius: 8px; height: 260px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 15px; left: 15px; display: flex; align-items: center; gap: 8px;">
+                    <span style="height: 8px; width: 8px; background-color: #10b981; border-radius: 50%; display: inline-block;"></span>
+                    <span style="color: #64748b; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em;">CV CORE ENGAGED</span>
+                </div>
+                <span style="font-size: 2.5rem; opacity: 0.35;">🌉</span>
+                <p style="color: #64748b; font-size: 0.85rem; letter-spacing: 0.03em; margin-top: 15px; font-weight: 300;">Structural Baseline Processing</p>
+                <p style="color: #10b981; font-size: 0.9rem; font-weight: 400; letter-spacing: 0.02em; margin: 3px 0 0 0;">✓ FLOW CAPACITY WITHIN TOLERANCE LIMITS</p>
+            </div>
+        """, unsafe_transform=True)
+
+# --- Clean Analytical Base ---
+st.markdown("<br><br>", unsafe_transform=True)
+st.markdown("<p class='luxury-title'>📈 Predictive Regression Matrix (24-Hour Delta)</p>", unsafe_transform=True)
+chart_data = pd.DataFrame(
+    np.random.randn(24, 2) + [10, 12],
+    columns=['Hydric Volume Forecast', 'Empirical Measurement']
+)
+st.line_chart(chart_data, use_container_width=True)
