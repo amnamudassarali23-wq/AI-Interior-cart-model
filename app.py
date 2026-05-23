@@ -36,7 +36,7 @@ st.markdown("""
     
     /* Modernist Minimal Container Card Matrix */
     .luxury-card {
-        background: rgba(28, 25, 23, 0.85);
+        background: rgba(245, 245, 220, 0.85);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(245, 245, 220, 0.2);
@@ -88,6 +88,7 @@ st.markdown("""
         font-weight: 400;
     }
     
+    /* Item Typography */
     .item-title {
         font-family: 'Syne', sans-serif;
         font-weight: 500;
