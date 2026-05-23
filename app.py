@@ -36,32 +36,32 @@ st.markdown("""
     
     /* Modernist Minimal Container Card Matrix */
     .luxury-card {
-        background: rgba(245, 245, 220, 0.85); /* Inverted from dark to beige */
+        background: rgba(28, 25, 23, 0.85);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(245, 245, 220, 0.2);
         border-radius: 16px;
         padding: 24px;
         margin-bottom: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .luxury-card:hover {
-        border: 1px solid rgba(0, 0, 0, 0.4);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(245, 245, 220, 0.5);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         transform: translateY(-3px);
     }
     
-    /* Inner Page Boxes: Now Beige Background containing Black Items */
+    /* Inner Page Beige Boxes containing Black Items */
     .inner-black-box {
-        background-color: #f5f5dc !important; /* Inverted to Beige */
-        border: 1px solid #000000;             /* Inverted to Black */
+        background-color: #f5f5dc !important;
+        border: 1px solid #000000;
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 10px;
     }
     .inner-black-box p, .inner-black-box span, .inner-black-box div {
-        color: #000000 !important;             /* Inverted to Black Text */
+        color: #000000 !important;
     }
 
     /* Sleek Distinct Top Borders */
@@ -117,7 +117,7 @@ st.markdown("""
         font-family: 'Syne', sans-serif;
         font-weight: 500;
         letter-spacing: 0.05em;
-        color: #f5f5dc !important;
+        color: #000000 !important;
         margin-bottom: 20px;
         font-size: 1.1rem;
         text-align: center;
@@ -151,9 +151,9 @@ st.markdown("""
 
     /* Global Square Welcome Button Layout */
     .stButton > button {
-        background: #f5f5dc !important;
-        color: #000000 !important;
-        border: 2px solid #000000 !important;
+        background: #000000 !important;
+        color: #f5f5dc !important;
+        border: 2px solid #f5f5dc !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         letter-spacing: 0.02em !important;
         font-weight: bold !important;
@@ -163,9 +163,9 @@ st.markdown("""
         transition: all 0.3s ease !important;
     }
     .stButton > button:hover {
-        color: #f5f5dc !important;
-        border: 2px solid #f5f5dc !important;
-        background: #000000 !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+        background: #f5f5dc !important;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
     }
 
@@ -187,11 +187,11 @@ st.markdown("""
     
     /* Sidebar Structure Background Tweaks */
     section[data-testid="stSidebar"] {
-        background-color: #000000 !important;
-        border-right: 1px solid #f5f5dc;
+        background-color: #f5f5dc !important;
+        border-right: 1px solid #000000;
     }
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span {
-        color: #f5f5dc !important;
+        color: #000000 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -263,7 +263,7 @@ else:
     cart_item_count = sum(st.session_state.cart.values())
     cart_total_price = sum(next(p['price'] for p in PRODUCTS if p['id'] == pid) * qty for pid, qty in st.session_state.cart.items())
 
-    # --- NAVIGATION ARCHITECTURE SIDEBAR (Inverted Base Matrix) ---
+    # --- NAVIGATION ARCHITECTURE SIDEBAR (Beige & Black Color Matrix) ---
     with st.sidebar:
         st.markdown("<br><div class='nav-header'>Chinar Directory</div>", unsafe_allow_html=True)
         selected = option_menu(
@@ -273,10 +273,10 @@ else:
             menu_icon="cast",
             default_index=0,
             styles={
-                "container": {"padding": "5px!important", "background-color": "#000000"},
-                "icon": {"color": "#f5f5dc", "font-size": "14px"}, 
-                "nav-link": {"font-size": "13px", "text-align": "left", "margin":"6px", "color":"#f5f5dc", "background-color": "#000000", "font-family": "Plus Jakarta Sans", "border": "1px solid #f5f5dc"},
-                "nav-link-selected": {"background-color": "#f5f5dc", "color": "#000000", "font-weight": "bold"},
+                "container": {"padding": "5px!important", "background-color": "#f5f5dc"},
+                "icon": {"color": "#000000", "font-size": "14px"}, 
+                "nav-link": {"font-size": "13px", "text-align": "left", "margin":"6px", "color":"#000000", "background-color": "#f5f5dc", "font-family": "Plus Jakarta Sans", "border": "1px solid #000000"},
+                "nav-link-selected": {"background-color": "#000000", "color": "#f5f5dc", "font-weight": "bold"},
             }
         )
 
