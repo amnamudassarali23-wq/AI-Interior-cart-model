@@ -18,9 +18,6 @@ st.markdown("""
         background-color: #07090e; 
     }
     
-    /* Clean up default Streamlit padding & clutter */
-    #MainMenu, footer, header {visibility: hidden;}
-    
     /* Luxury Glassmorphism Panel Cards */
     .luxury-card {
         background: rgba(15, 20, 30, 0.65);
@@ -67,10 +64,10 @@ st.markdown("""
         letter-spacing: -0.02em;
     }
     </style>
-""", unsafe_transform=True)
+""", unsafe_allow_html=True)
 
 # --- Sidebar Controls ---
-st.sidebar.markdown("<h2 style='font-weight: 300; letter-spacing: 0.05em; color: #D4AF37;'>⚜️ SIMULATOR</h2>", unsafe_transform=True)
+st.sidebar.markdown("<h2 style='font-weight: 300; letter-spacing: 0.05em; color: #D4AF37;'>⚜️ SIMULATOR</h2>", unsafe_allow_html=True)
 st.sidebar.markdown("Fine-tune parameters to preview state-changes across the custom UI layer.")
 sim_rain = st.sidebar.slider("Simulated 6h Rain (mm)", 0.0, 45.0, 12.0)
 sim_water = st.sidebar.slider("Current Gauge Level (ft)", 2.0, 22.0, 8.5)
@@ -98,7 +95,7 @@ st.markdown(f"""
             <p style="color: #D4AF37; font-size: 0.9rem; font-weight: 400; margin: 5px 0 0 0; letter-spacing: 0.05em;">● LIVE ENGINES SYNCHRONIZED</p>
         </div>
     </div>
-""", unsafe_transform=True)
+""", unsafe_allow_html=True)
 
 # --- Top Level Alert Banner (Executive Interface) ---
 st.markdown(f"""
@@ -115,37 +112,36 @@ st.markdown(f"""
             </div>
         </div>
     </div>
-""", unsafe_transform=True)
+""", unsafe_allow_html=True)
 
 # --- Performance Indicators Matrix ---
 m_col1, m_col2, m_col3, m_col4 = st.columns(4)
 
 with m_col1:
-    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_allow_html=True)
     st.metric(label="🌧️ 6H PRECIPITATION INTENSITY", value=f"{sim_rain} mm", delta="-1.4 mm / hr")
-    st.markdown("""</div>""", unsafe_transform=True)
+    st.markdown("""</div>""", unsafe_allow_html=True)
 
 with m_col2:
-    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_allow_html=True)
     st.metric(label="📏 CHANNEL GAUGE DEPTH", value=f"{sim_water} ft", delta="+0.8 ft (Surging)", delta_color="inverse")
-    st.markdown("""</div>""", unsafe_transform=True)
+    st.markdown("""</div>""", unsafe_allow_html=True)
 
 with m_col3:
-    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_allow_html=True)
     st.metric(label="⚡ DISCHARGE VELOCITY", value="4.1 m/s", delta="Averaged")
-    st.markdown("""</div>""", unsafe_transform=True)
+    st.markdown("""</div>""", unsafe_allow_html=True)
 
 with m_col4:
-    st.markdown("""<div class="luxury-card border-gold">""", unsafe_transform=True)
+    st.markdown("""<div class="luxury-card border-gold">""", unsafe_allow_html=True)
     st.metric(label="🛰️ LOGISTICS NETWORK", value="100%", delta="14 Nodes Operational")
-    st.markdown("""</div>""", unsafe_transform=True)
+    st.markdown("""</div>""", unsafe_allow_html=True)
 
 # --- Visual Infrastructure Segment ---
 layout_col1, layout_col2 = st.columns([1.3, 1])
 
 with layout_col1:
-    st.markdown("<p class='luxury-title' style='margin-bottom: 15px;'>📍 Spatial Telemetry Mapping</p>", unsafe_transform=True)
-    # Generate balanced point clusters surrounding Nala Lai channels
+    st.markdown("<p class='luxury-title' style='margin-bottom: 15px;'>📍 Spatial Telemetry Mapping</p>", unsafe_allow_html=True)
     map_data = pd.DataFrame(
         np.random.randn(6, 2) / [190, 190] + [33.5973, 73.0479],
         columns=['lat', 'lon']
@@ -153,7 +149,7 @@ with layout_col1:
     st.map(map_data, use_container_width=True)
 
 with layout_col2:
-    st.markdown("<p class='luxury-title' style='margin-bottom: 15px;'>📹 Deep-Neural Surveillance Feeds</p>", unsafe_transform=True)
+    st.markdown("<p class='luxury-title' style='margin-bottom: 15px;'>📹 Deep-Neural Surveillance Feeds</p>", unsafe_allow_html=True)
     
     feed_tab1, feed_tab2 = st.tabs(["🔒 STATION 01: KATARIAN", "🔒 STATION 02: GANJMANDI"])
     
@@ -170,7 +166,7 @@ with layout_col2:
                     {"⚠️ ALERT: ANOMALOUS RADIAL PATTERNS / HUMAN DISCOVERED" if sim_water > 14 else "✓ NO CRITICAL INFRASTRUCTURE DEFECTS"}
                 </p>
             </div>
-        """, unsafe_transform=True)
+        """, unsafe_allow_html=True)
         
     with feed_tab2:
         st.markdown("""
@@ -183,11 +179,11 @@ with layout_col2:
                 <p style="color: #64748b; font-size: 0.85rem; letter-spacing: 0.03em; margin-top: 15px; font-weight: 300;">Structural Baseline Processing</p>
                 <p style="color: #10b981; font-size: 0.9rem; font-weight: 400; letter-spacing: 0.02em; margin: 3px 0 0 0;">✓ FLOW CAPACITY WITHIN TOLERANCE LIMITS</p>
             </div>
-        """, unsafe_transform=True)
+        """, unsafe_allow_html=True)
 
 # --- Clean Analytical Base ---
-st.markdown("<br><br>", unsafe_transform=True)
-st.markdown("<p class='luxury-title'>📈 Predictive Regression Matrix (24-Hour Delta)</p>", unsafe_transform=True)
+st.markdown("<br><br>", unsafe_allow_html=True)
+st.markdown("<p class='luxury-title'>📈 Predictive Regression Matrix (24-Hour Delta)</p>", unsafe_allow_html=True)
 chart_data = pd.DataFrame(
     np.random.randn(24, 2) + [10, 12],
     columns=['Hydric Volume Forecast', 'Empirical Measurement']
