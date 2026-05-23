@@ -52,26 +52,36 @@ st.markdown("""
         transform: translateY(-3px);
     }
     
+    /* Inner Page Black Boxes containing Beige Items */
+    .inner-black-box {
+        background-color: #000000 !important;
+        border: 1px solid #f5f5dc;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+    .inner-black-box p, .inner-black-box span, .inner-black-box div {
+        color: #f5f5dc !important;
+    }
+
     /* Sleek Distinct Top Borders */
     .gold-accent-line {
-        border-top: 2px solid #e6dfd3 !important;
+        border-top: 2px solid #000000 !important;
     }
     
-    /* Typography Overrides altered to Beige colors */
+    /* Typography Overrides */
     .brand-title {
         font-family: 'Syne', sans-serif;
         font-weight: 600;
         letter-spacing: -0.02em;
         text-transform: none;
-        background: linear-gradient(135deg, #ffffff 0%, #f5f5dc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #000000 !important;
         font-size: 2.8rem;
         margin: 0;
     }
     .brand-sub {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #e6dfd3;
+        color: #000000 !important;
         font-size: 0.85rem;
         letter-spacing: 0.05em;
         margin: 8px 0 0 0;
@@ -83,11 +93,11 @@ st.markdown("""
         font-weight: 500;
         font-size: 1.3rem;
         letter-spacing: 0em;
-        color: #f5f5dc;
+        color: #000000 !important;
     }
     .item-meta {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #d4cbbe;
+        color: #111111 !important;
         font-size: 0.8rem;
         font-weight: 400;
         margin-top: 4px;
@@ -96,11 +106,10 @@ st.markdown("""
     /* Pricing Badge UI Elements */
     .gold-price-tag {
         font-family: 'Plus Jakarta Sans', sans-serif;
-        color: #f5f5dc;
+        color: #000000 !important;
         font-weight: 500;
         font-size: 1.4rem;
         letter-spacing: -0.01em;
-        text-shadow: 0 0 20px rgba(245, 245, 220, 0.2);
     }
     
     /* Navigation Header Component */
@@ -108,7 +117,7 @@ st.markdown("""
         font-family: 'Syne', sans-serif;
         font-weight: 500;
         letter-spacing: 0.05em;
-        color: #f5f5dc;
+        color: #f5f5dc !important;
         margin-bottom: 20px;
         font-size: 1.1rem;
         text-align: center;
@@ -116,12 +125,12 @@ st.markdown("""
 
     /* Elegant Custom Overrides for Streamlit Forms and Inputs */
     div[data-baseweb="input"] {
-        background-color: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(245, 245, 220, 0.2) !important;
+        background-color: rgba(0, 0, 0, 0.05) !important;
+        border: 1px solid rgba(0, 0, 0, 0.2) !important;
         border-radius: 8px !important;
     }
     div[data-baseweb="input"] input {
-        color: #f5f5dc !important;
+        color: #000000 !important;
         font-family: 'Plus Jakarta Sans', sans-serif;
         font-size: 0.9rem;
     }
@@ -129,60 +138,60 @@ st.markdown("""
     /* Custom modifications for Streamlit default metrics */
     div[data-testid="stMetricValue"] {
         font-family: 'Syne', sans-serif !important;
-        color: #f5f5dc !important;
+        color: #000000 !important;
         font-size: 1.8rem !important;
         font-weight: 500 !important;
     }
     div[data-testid="stMetricLabel"] {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        color: #d4cbbe !important;
+        color: #222222 !important;
         letter-spacing: 0.05em !important;
         font-size: 0.75rem !important;
     }
 
-    /* Global Modernist Button Styling Overrides */
+    /* Global Square Welcome Button Layout */
     .stButton > button {
-        background: rgba(255, 255, 255, 0.05) !important;
-        color: #e6dfd3 !important;
-        border: 1px solid rgba(245, 245, 220, 0.3) !important;
+        background: #f5f5dc !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         letter-spacing: 0.02em !important;
-        font-weight: 500 !important;
-        font-size: 0.8rem !important;
-        border-radius: 8px !important;
-        padding: 10px 20px !important;
-        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        font-weight: bold !important;
+        font-size: 0.95rem !important;
+        border-radius: 0px !important; /* Strict Square Shape */
+        padding: 12px 24px !important;
+        transition: all 0.3s ease !important;
     }
     .stButton > button:hover {
         color: #f5f5dc !important;
-        border: 1px solid #f5f5dc !important;
-        background: rgba(245, 245, 220, 0.1) !important;
-        box-shadow: 0 4px 20px rgba(245, 245, 220, 0.2) !important;
-    }
-    .stButton [data-testid="stBaseButton-primary"] {
-        background: #f5f5dc !important;
-        color: #0b0d12 !important;
-        border: 1px solid #f5f5dc !important;
-        font-weight: 600 !important;
-    }
-    .stButton [data-testid="stBaseButton-primary"]:hover {
-        background: #ffffff !important;
-        color: #0b0d12 !important;
-        border: 1px solid #ffffff !important;
-        box-shadow: 0 6px 25px rgba(255, 255, 255, 0.25) !important;
+        border: 2px solid #f5f5dc !important;
+        background: #000000 !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
     }
 
     /* Fix Tab Item Styling to match Minimalist Modern theme */
     button[data-baseweb="tab"] {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 0.8rem !important;
-        color: #d4cbbe !important;
+        color: #222222 !important;
     }
     button[aria-selected="true"] {
-        color: #f5f5dc !important;
+        color: #000000 !important;
+        font-weight: bold !important;
     }
-    p, span, label {
-        color: #e6dfd3 !important;
+    
+    /* Global Text Elements to Black Color on Inner Content */
+    p, span, label, h1, h2, h3, h4, h5, h6 {
+        color: #000000 !important;
+    }
+    
+    /* Sidebar Structure Background Tweaks */
+    section[data-testid="stSidebar"] {
+        background-color: #000000 !important;
+        border-right: 1px solid #f5f5dc;
+    }
+    section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span {
+        color: #f5f5dc !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -207,14 +216,14 @@ PRODUCTS = [
 
 # --- 3. REFINED ATELIER HEADER ---
 st.markdown("""
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 0 25px 0; border-bottom: 1px solid rgba(245,245,220,0.2); margin-bottom: 40px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 0 25px 0; border-bottom: 2px solid #000000; margin-bottom: 40px;">
         <div>
             <h1 class="brand-title">Chinar & Co.</h1>
             <p class="brand-sub">Premium Heritage Craftsmanship for Architectural Interiors</p>
         </div>
         <div style="text-align: right; font-family: 'Plus Jakarta Sans', sans-serif;">
-            <p style="color: #d4cbbe; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; margin:0;">Atelier Flagship Network</p>
-            <p style="color: #f5f5dc; font-size: 0.8rem; margin: 4px 0 0 0; font-weight: 500;">LAHORE • KARACHI • ISLAMABAD</p>
+            <p style="color: #111111; font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; margin:0;">Atelier Flagship Network</p>
+            <p style="color: #000000; font-size: 0.8rem; margin: 4px 0 0 0; font-weight: bold;">LAHORE • KARACHI • ISLAMABAD</p>
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -223,21 +232,21 @@ st.markdown("""
 # --- 4. CONDITIONAL CONDENSED ARCHITECTURE SYSTEM ---
 if not st.session_state.app_unlocked:
     # LANDING GATEWAY: Show only Developer Info card and Unlock Application controls
-    st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#f5f5dc; margin-bottom:25px;'>PROJECT DEPLOYMENT INFORMATION</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='font-family:\"Syne\"; font-weight:bold; color:#000000; margin-bottom:25px;'>PROJECT DEPLOYMENT INFORMATION</h4>", unsafe_allow_html=True)
     st.markdown("""
-        <div class="luxury-card" style="border-top: 2px solid #f5f5dc; padding: 40px 30px;">
-            <h2 style="font-family:'Syne'; color:#f5f5dc; font-weight:500; margin-bottom:5px;">Amna Mudassar Ali</h2>
-            <p style="font-family:'Plus Jakarta Sans'; color:#e6dfd3; font-size:1.05rem; letter-spacing:0.02em; font-weight:300; margin-bottom:25px;">
+        <div style="background: rgba(255, 255, 255, 0.9); border: 2px solid #000000; padding: 40px 30px; margin-bottom: 20px;">
+            <h2 style="font-family:'Syne'; color:#000000; font-weight:600; margin-bottom:5px;">Amna Mudassar Ali</h2>
+            <p style="font-family:'Plus Jakarta Sans'; color:#111111; font-size:1.05rem; letter-spacing:0.02em; font-weight:400; margin-bottom:25px;">
                 Lead System Architect & Developer
             </p>
-            <hr style="border: 0; border-top: 1px solid rgba(245,245,220,0.2); margin-bottom:25px;">
-            <div style="display: grid; grid-template-columns: 140px 1fr; row-gap: 15px; font-family:'Plus Jakarta Sans'; font-size:0.95rem; line-height:1.6;">
-                <div style="color:#d4cbbe; font-weight:500;">Academic Status:</div>
-                <div style="color:#e6dfd3;">Student of First Semester</div>
-                <div style="color:#d4cbbe; font-weight:500;">Institution:</div>
-                <div style="color:#e6dfd3;">International Islamic University, Islamabad (IIUI)</div>
-                <div style="color:#d4cbbe; font-weight:500;">Classification:</div>
-                <div style="color:#f5f5dc; font-weight:600; letter-spacing:0.05em;">FIRST YEAR PROJECT (FYP)</div>
+            <hr style="border: 0; border-top: 2px solid #000000; margin-bottom:25px;">
+            <div style="display: grid; grid-template-columns: 140px 1fr; row-gap: 15px; font-family:'Plus Jakarta Sans'; font-size:0.95rem; line-height:1.6; color: #000000;">
+                <div style="color:#000000; font-weight:bold;">Academic Status:</div>
+                <div style="color:#000000;">Student of First Semester</div>
+                <div style="color:#000000; font-weight:bold;">Institution:</div>
+                <div style="color:#000000;">International Islamic University, Islamabad (IIUI)</div>
+                <div style="color:#000000; font-weight:bold;">Classification:</div>
+                <div style="color:#000000; font-weight:bold; letter-spacing:0.05em;">FIRST YEAR PROJECT (FYP)</div>
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -245,7 +254,7 @@ if not st.session_state.app_unlocked:
     st.link_button("🌐 Connect on LinkedIn Profile", "https://www.linkedin.com/in/amna-mudassar-ali-64aa763ab?utm_source=share_via&utm_content=profile&utm_medium=member_android", use_container_width=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("✨ Enter Atelier Application", type="primary", use_container_width=True):
+    if st.button("Welcome", type="primary", use_container_width=True):
         st.session_state.app_unlocked = True
         st.rerun()
 
@@ -254,7 +263,7 @@ else:
     cart_item_count = sum(st.session_state.cart.values())
     cart_total_price = sum(next(p['price'] for p in PRODUCTS if p['id'] == pid) * qty for pid, qty in st.session_state.cart.items())
 
-    # --- NAVIGATION ARCHITECTURE SIDEBAR ---
+    # --- NAVIGATION ARCHITECTURE SIDEBAR (Black & Beige Color Matrix) ---
     with st.sidebar:
         st.markdown("<br><div class='nav-header'>Chinar Directory</div>", unsafe_allow_html=True)
         selected = option_menu(
@@ -264,10 +273,10 @@ else:
             menu_icon="cast",
             default_index=0,
             styles={
-                "container": {"padding": "0!important", "background-color": "transparent"},
-                "icon": {"color": "#d4cbbe", "font-size": "14px"}, 
-                "nav-link": {"font-size": "13px", "text-align": "left", "margin":"6px", "color":"#e6dfd3", "font-family": "Plus Jakarta Sans", "font-weight": "400"},
-                "nav-link-selected": {"background-color": "rgba(245, 245, 220, 0.2)", "color": "#f5f5dc", "border-left": "3px solid #f5f5dc"},
+                "container": {"padding": "5px!important", "background-color": "#000000"},
+                "icon": {"color": "#f5f5dc", "font-size": "14px"}, 
+                "nav-link": {"font-size": "13px", "text-align": "left", "margin":"6px", "color":"#f5f5dc", "background-color": "#000000", "font-family": "Plus Jakarta Sans", "border": "1px solid #f5f5dc"},
+                "nav-link-selected": {"background-color": "#f5f5dc", "color": "#000000", "font-weight": "bold"},
             }
         )
 
@@ -275,22 +284,22 @@ else:
     metric_col1, metric_col2, metric_col3, metric_col4 = st.columns(4)
 
     with metric_col1:
-        st.markdown('<div class="luxury-card gold-accent-line">', unsafe_allow_html=True)
+        st.markdown('<div class="inner-black-box">', unsafe_allow_html=True)
         st.metric("Curated Designs", f"{len(PRODUCTS)} Items")
         st.markdown('</div>', unsafe_allow_html=True)
 
     with metric_col2:
-        st.markdown('<div class="luxury-card gold-accent-line">', unsafe_allow_html=True)
+        st.markdown('<div class="inner-black-box">', unsafe_allow_html=True)
         st.metric("Cart Reservations", f"{cart_item_count} Units")
         st.markdown('</div>', unsafe_allow_html=True)
 
     with metric_col3:
-        st.markdown('<div class="luxury-card gold-accent-line">', unsafe_allow_html=True)
+        st.markdown('<div class="inner-black-box">', unsafe_allow_html=True)
         st.metric("Total Portfolio Value", f"${cart_total_price:,.2f}")
         st.markdown('</div>', unsafe_allow_html=True)
 
     with metric_col4:
-        st.markdown('<div class="luxury-card gold-accent-line">', unsafe_allow_html=True)
+        st.markdown('<div class="inner-black-box">', unsafe_allow_html=True)
         st.metric("Available Vault Stock", f"{sum(p['stock'] for p in PRODUCTS)} Units")
         st.markdown('</div>', unsafe_allow_html=True)
 
@@ -319,24 +328,24 @@ else:
             with tab_obj:
                 cat_items = [p for p in filtered if p['category'] == cat_slug]
                 if not cat_items:
-                    st.markdown("<p style='color:#e6dfd3; font-style:italic; padding: 20px 0; font-size:0.85rem;'>No editions match specified tracking limits inside this salon segment.</p>", unsafe_allow_html=True)
+                    st.markdown("<p style='color:#000000; font-style:italic; padding: 20px 0; font-size:0.85rem;'>No editions match specified tracking limits inside this salon segment.</p>", unsafe_allow_html=True)
                 
                 for item in cat_items:
                     st.markdown(f"""
-                        <div class="luxury-card">
+                        <div class="inner-black-box">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                                 <div style="display: flex; align-items: center; gap: 25px;">
-                                    <div style="font-size: 2rem; background: rgba(255,255,255,0.01); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(245,245,220,0.2);">{item['image']}</div>
+                                    <div style="font-size: 2rem; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; border: 1px solid #f5f5dc;">{item['image']}</div>
                                     <div>
-                                        <div class="item-title">{item['name']}</div>
-                                        <div class="item-meta">Limited Production Manifest: <span style="color:#e6dfd3; font-weight:500;">{item['stock']} units remain</span></div>
+                                        <div style="font-family:'Syne'; font-weight:500; font-size:1.3rem; color:#f5f5dc;">{item['name']}</div>
+                                        <div style="color:#f5f5dc; font-size:0.8rem;">Limited Production Manifest: <span style="font-weight:500; color:#f5f5dc;">{item['stock']} units remain</span></div>
                                     </div>
                                 </div>
                     """, unsafe_allow_html=True)
                     
                     action_col1, action_col2 = st.columns([2, 1])
                     with action_col1:
-                        st.markdown(f'<div class="gold-price-tag" style="text-align:right; padding-top:4px;">${item["price"]:,.2f}</div>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#f5f5dc; font-size:1.4rem;">${item["price"]:,.2f}</div>', unsafe_allow_html=True)
                     with action_col2:
                         if st.button("Acquire Lot Assignment", key=f"acq_{item['id']}", use_container_width=True):
                             st.session_state.cart[item['id']] = st.session_state.cart.get(item['id'], 0) + 1
@@ -346,25 +355,25 @@ else:
                     st.markdown("</div></div>", unsafe_allow_html=True)
 
     elif selected == "Cart":
-        st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#ffffff; margin-bottom:25px;'>YOUR SELECTION PORTFOLIO</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#000000; margin-bottom:25px;'>YOUR SELECTION PORTFOLIO</h4>", unsafe_allow_html=True)
         if not st.session_state.cart:
-            st.markdown("<div class='luxury-card' style='color:#e6dfd3; font-style:italic; font-size:0.85rem;'>Your structural portfolio selection layout is currently empty.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='inner-black-box'>Your structural portfolio selection layout is currently empty.</div>", unsafe_allow_html=True)
         else:
             for pid, qty in list(st.session_state.cart.items()):
                 item_details = next(p for p in PRODUCTS if p['id'] == pid)
                 
                 st.markdown(f"""
-                    <div class="luxury-card" style="padding: 16px 24px;">
+                    <div class="inner-black-box" style="padding: 16px 24px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
                             <div>
-                                <span class="item-title" style="font-size:1.15rem;">{item_details['name']}</span>
-                                <span style="color:#e6dfd3; font-size:0.85rem; font-family:'Plus Jakarta Sans'; margin-left:20px;">LOT YIELD: {qty}</span>
+                                <span style="font-size:1.15rem; font-weight:bold; color:#f5f5dc;">{item_details['name']}</span>
+                                <span style="font-size:0.85rem; font-family:'Plus Jakarta Sans'; margin-left:20px; color:#f5f5dc;">LOT YIELD: {qty}</span>
                             </div>
                 """, unsafe_allow_html=True)
                 
                 c_price, c_btn = st.columns([3, 1])
                 with c_price:
-                    st.markdown(f'<div class="gold-price-tag" style="text-align:right; padding-top:4px;">${item_details["price"] * qty:,.2f}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#f5f5dc; font-size:1.4rem;">${item_details["price"] * qty:,.2f}</div>', unsafe_allow_html=True)
                 with c_btn:
                     if st.button("Release Unit Allocation", key=f"rel_{pid}", use_container_width=True):
                         del st.session_state.cart[pid]
@@ -373,15 +382,15 @@ else:
                 st.markdown("</div></div>", unsafe_allow_html=True)
 
     elif selected == "Checkout":
-        st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#ffffff; margin-bottom:25px;'>SECURE ESCROW TRANSFERS</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#000000; margin-bottom:25px;'>SECURE ESCROW TRANSFERS</h4>", unsafe_allow_html=True)
         if not st.session_state.cart:
-            st.markdown("<div class='luxury-card' style='border-left: 2px solid #f5f5dc; color: #e6dfd3; font-family:\"Plus Jakarta Sans\"; font-size:0.85rem;'>Your current portfolio allocation is dry. Transaction engines cannot initialize without asset parameters.</div>", unsafe_allow_html=True)
+            st.markdown("<div class='inner-black-box'>Your current portfolio allocation is dry. Transaction engines cannot initialize without asset parameters.</div>", unsafe_allow_html=True)
         else:
             st.markdown(f"""
-                <div class="luxury-card" style="text-align: center; padding: 45px 20px; border-top: 2px solid #f5f5dc;">
-                    <p style="font-family:'Plus Jakarta Sans'; color:#e6dfd3; text-transform:uppercase; letter-spacing:0.05em; margin:0; font-size:0.75rem;">Consolidated Bill Gross Balance</p>
-                    <div style="font-size: 3.2rem; font-weight:600; color:#ffffff; margin: 15px 0; font-family:'Syne';">${cart_total_price:,.2f}</div>
-                    <p style="color:#e6dfd3; font-size:0.85rem; max-width:520px; margin:0 auto 30px auto; font-family:'Plus Jakarta Sans'; line-height:1.6;">Confirming this data stream sets customized logistics chains in motion. Premium white-glove line deliveries will be routed immediately to your designated estate parameters.</p>
+                <div class="inner-black-box" style="text-align: center; padding: 45px 20px;">
+                    <p style="font-family:'Plus Jakarta Sans'; text-transform:uppercase; letter-spacing:0.05em; margin:0; font-size:0.75rem; color:#f5f5dc;">Consolidated Bill Gross Balance</p>
+                    <div style="font-size: 3.2rem; font-weight:600; margin: 15px 0; font-family:'Syne'; color:#f5f5dc;">${cart_total_price:,.2f}</div>
+                    <p style="font-size:0.85rem; max-width:520px; margin:0 auto 30px auto; font-family:'Plus Jakarta Sans'; line-height:1.6; color:#f5f5dc;">Confirming this data stream sets customized logistics chains in motion. Premium white-glove line deliveries will be routed immediately to your designated estate parameters.</p>
                 </div>
             """, unsafe_allow_html=True)
             
@@ -392,28 +401,29 @@ else:
                 st.rerun()
 
     elif selected == "Dashboard":
-        st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#ffffff; margin-bottom:25px;'>ATELIER MARKET DEPLOYMENT LOGS</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#000000; margin-bottom:25px;'>ATELIER MARKET DEPLOYMENT LOGS</h4>", unsafe_allow_html=True)
         df = pd.DataFrame(PRODUCTS)
         
-        beige_luxury_colors = ['#f5f5dc', '#ecdcb9', '#dfcaa3', '#cbb38a', '#ab946f']
+        # Dark Accent Color Palette for Data Visibility
+        black_luxury_colors = ['#000000', '#222222', '#444444', '#666666', '#888888']
         
         fig_scatter = px.scatter(
             df, x='price', y='stock', size='price', color='category', hover_name='name',
             title="Asset Valuation Distributions vs Stock Balance Matrix",
-            color_discrete_sequence=beige_luxury_colors
+            color_discrete_sequence=black_luxury_colors
         )
         fig_scatter.update_layout(
             plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)',
-            font_color="#e6dfd3", font_family="Plus Jakarta Sans", title_font_family="Syne", title_font_color="#ffffff", title_font_size=14
+            font_color="#000000", font_family="Plus Jakarta Sans", title_font_family="Syne", title_font_color="#000000", title_font_size=14
         )
         st.plotly_chart(fig_scatter, use_container_width=True)
         
         col_g1, col_g2 = st.columns(2)
         with col_g1:
-            fig_pie = px.pie(df, names='category', values='stock', title="Lot Volume Storage Distributions", color_discrete_sequence=beige_luxury_colors)
-            fig_pie.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font_color="#e6dfd3", font_family="Plus Jakarta Sans", title_font_family="Syne", title_font_color="#ffffff", title_font_size=14)
+            fig_pie = px.pie(df, names='category', values='stock', title="Lot Volume Storage Distributions", color_discrete_sequence=black_luxury_colors)
+            fig_pie.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font_color="#000000", font_family="Plus Jakarta Sans", title_font_family="Syne", title_font_color="#000000", title_font_size=14)
             st.plotly_chart(fig_pie, use_container_width=True)
         with col_g2:
-            fig_bar = px.bar(df, x='category', y='price', color='category', title="Geometric Structural Baseline Costs", color_discrete_sequence=beige_luxury_colors)
-            fig_bar.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font_color="#e6dfd3", font_family="Plus Jakarta Sans", title_font_family="Syne", title_font_color="#ffffff", title_font_size=14)
+            fig_bar = px.bar(df, x='category', y='price', color='category', title="Geometric Structural Baseline Costs", color_discrete_sequence=black_luxury_colors)
+            fig_bar.update_layout(plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', font_color="#000000", font_family="Plus Jakarta Sans", title_font_family="Syne", title_font_color="#000000", title_font_size=14)
             st.plotly_chart(fig_bar, use_container_width=True)
