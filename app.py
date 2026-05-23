@@ -221,12 +221,12 @@ if not st.session_state.app_unlocked:
         <div style="background: rgba(255, 255, 255, 0.9); border: 2px solid #000000; padding: 40px 30px; margin-bottom: 20px;">
             <h2 style="font-family:'Syne'; color:#000000; font-weight:600; margin-bottom:5px;">Amna Mudassar Ali</h2>
             <p style="font-family:'Plus Jakarta Sans'; color:#111111; font-size:1.05rem; letter-spacing:0.02em; font-weight:400; margin-bottom:25px;">
-                Lead System Architect & Developer
+                Artificial Intelligence developer
             </p>
             <hr style="border: 0; border-top: 2px solid #000000; margin-bottom:25px;">
             <div style="display: grid; grid-template-columns: 140px 1fr; row-gap: 15px; font-family:'Plus Jakarta Sans'; font-size:0.95rem; line-height:1.6; color: #000000;">
                 <div style="color:#000000; font-weight:bold;">Academic Status:</div>
-                <div style="color:#000000;">Student of First Semester</div>
+                <div style="color:#000000;">Student of Second Semester</div>
                 <div style="color:#000000; font-weight:bold;">Institution:</div>
                 <div style="color:#000000;">International Islamic University, Islamabad (IIUI)</div>
                 <div style="color:#000000; font-weight:bold;">Classification:</div>
@@ -250,7 +250,7 @@ else:
         st.markdown("<br><div class='nav-header'>Chinar Directory</div>", unsafe_allow_html=True)
         selected = option_menu(
             menu_title=None,
-            options=["Catalog", "Cart", "Checkout", "Dashboard", "Return to Developer Info"],
+            options=["Catalog", "Cart", "Checkout", "Dashboard", "Return to main page"],
             icons=["grid", "bag", "credit-card", "pie-chart", "info-circle"],
             menu_icon="cast",
             default_index=0,
