@@ -15,12 +15,12 @@ st.set_page_config(
 # --- 2. ELITE MINIMALIST UI CSS INJECTION ---
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Syne:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600&family=Syne:wght=400;500;600&display=swap');
 
-    /* Persistent Canvas Overrides with 3D Luxury Room Background */
+    /* Persistent Canvas Overrides with Bright 3D Luxury Room Background */
     .stApp {
-        background-image: linear-gradient(rgba(11, 13, 18, 0.88), rgba(11, 13, 18, 0.94)), 
-                          url('https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1920&q=80') !important;
+        background-image: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)), 
+                          url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1920&q=80') !important;
         background-size: cover !important;
         background-position: center !important;
         background-attachment: fixed !important;
@@ -29,19 +29,19 @@ st.markdown("""
     
     /* Modernist Minimal Container Card Matrix */
     .luxury-card {
-        background: rgba(28, 25, 23, 0.65);
+        background: rgba(28, 25, 23, 0.85);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(245, 245, 220, 0.1);
+        border: 1px solid rgba(245, 245, 220, 0.2);
         border-radius: 16px;
         padding: 24px;
         margin-bottom: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .luxury-card:hover {
-        border: 1px solid rgba(245, 245, 220, 0.4);
-        box-shadow: 0 30px 60px rgba(245, 245, 220, 0.05);
+        border: 1px solid rgba(245, 245, 220, 0.5);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
         transform: translateY(-3px);
     }
     
@@ -109,8 +109,8 @@ st.markdown("""
 
     /* Elegant Custom Overrides for Streamlit Forms and Inputs */
     div[data-baseweb="input"] {
-        background-color: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(245, 245, 220, 0.1) !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(245, 245, 220, 0.2) !important;
         border-radius: 8px !important;
     }
     div[data-baseweb="input"] input {
@@ -135,9 +135,9 @@ st.markdown("""
 
     /* Global Modernist Button Styling Overrides */
     .stButton > button {
-        background: rgba(255, 255, 255, 0.02) !important;
+        background: rgba(255, 255, 255, 0.05) !important;
         color: #e6dfd3 !important;
-        border: 1px solid rgba(245, 245, 220, 0.2) !important;
+        border: 1px solid rgba(245, 245, 220, 0.3) !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         letter-spacing: 0.02em !important;
         font-weight: 500 !important;
@@ -149,8 +149,8 @@ st.markdown("""
     .stButton > button:hover {
         color: #f5f5dc !important;
         border: 1px solid #f5f5dc !important;
-        background: rgba(245, 245, 220, 0.05) !important;
-        box-shadow: 0 4px 20px rgba(245, 245, 220, 0.15) !important;
+        background: rgba(245, 245, 220, 0.1) !important;
+        box-shadow: 0 4px 20px rgba(245, 245, 220, 0.2) !important;
     }
     .stButton [data-testid="stBaseButton-primary"] {
         background: #f5f5dc !important;
@@ -219,13 +219,13 @@ with st.sidebar:
             "container": {"padding": "0!important", "background-color": "transparent"},
             "icon": {"color": "#d4cbbe", "font-size": "14px"}, 
             "nav-link": {"font-size": "13px", "text-align": "left", "margin":"6px", "color":"#e6dfd3", "font-family": "Plus Jakarta Sans", "font-weight": "400"},
-            "nav-link-selected": {"background-color": "rgba(245, 245, 220, 0.15)", "color": "#f5f5dc", "border-left": "3px solid #f5f5dc"},
+            "nav-link-selected": {"background-color": "rgba(245, 245, 220, 0.2)", "color": "#f5f5dc", "border-left": "3px solid #f5f5dc"},
         }
     )
 
 # --- 5. REFINED ATELIER HEADER ---
 st.markdown("""
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 0 25px 0; border-bottom: 1px solid rgba(245,245,220,0.1); margin-bottom: 40px;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 0 25px 0; border-bottom: 1px solid rgba(245,245,220,0.2); margin-bottom: 40px;">
         <div>
             <h1 class="brand-title">Chinar & Co.</h1>
             <p class="brand-sub">Premium Heritage Craftsmanship for Architectural Interiors</p>
@@ -269,7 +269,7 @@ if selected == "Main Page":
             <p style="font-family:'Plus Jakarta Sans'; color:#e6dfd3; font-size:1.05rem; letter-spacing:0.02em; font-weight:300; margin-bottom:25px;">
                 Lead System Architect & Developer
             </p>
-            <hr style="border: 0; border-top: 1px solid rgba(245,245,220,0.1); margin-bottom:25px;">
+            <hr style="border: 0; border-top: 1px solid rgba(245,245,220,0.2); margin-bottom:25px;">
             <div style="display: grid; grid-template-columns: 140px 1fr; row-gap: 15px; font-family:'Plus Jakarta Sans'; font-size:0.95rem; line-height:1.6;">
                 <div style="color:#d4cbbe; font-weight:500;">Academic Status:</div>
                 <div style="color:#e6dfd3;">Student of First Semester</div>
@@ -311,7 +311,7 @@ elif selected == "Catalog":
                     <div class="luxury-card">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                             <div style="display: flex; align-items: center; gap: 25px;">
-                                <div style="font-size: 2rem; background: rgba(255,255,255,0.01); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(245,245,220,0.1);">{item['image']}</div>
+                                <div style="font-size: 2rem; background: rgba(255,255,255,0.01); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(245,245,220,0.2);">{item['image']}</div>
                                 <div>
                                     <div class="item-title">{item['name']}</div>
                                     <div class="item-meta">Limited Production Manifest: <span style="color:#e6dfd3; font-weight:500;">{item['stock']} units remain</span></div>
