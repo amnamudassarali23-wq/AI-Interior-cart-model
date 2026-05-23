@@ -36,32 +36,32 @@ st.markdown("""
     
     /* Modernist Minimal Container Card Matrix */
     .luxury-card {
-        background: rgba(28, 25, 23, 0.85);
+        background: rgba(245, 245, 220, 0.85); /* Inverted from dark to beige */
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(245, 245, 220, 0.2);
+        border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 16px;
         padding: 24px;
         margin-bottom: 20px;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .luxury-card:hover {
-        border: 1px solid rgba(245, 245, 220, 0.5);
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(0, 0, 0, 0.4);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
         transform: translateY(-3px);
     }
     
-    /* Inner Page Black Boxes containing Beige Items */
+    /* Inner Page Boxes: Now Beige Background containing Black Items */
     .inner-black-box {
-        background-color: #000000 !important;
-        border: 1px solid #f5f5dc;
+        background-color: #f5f5dc !important; /* Inverted to Beige */
+        border: 1px solid #000000;             /* Inverted to Black */
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 10px;
     }
     .inner-black-box p, .inner-black-box span, .inner-black-box div {
-        color: #f5f5dc !important;
+        color: #000000 !important;             /* Inverted to Black Text */
     }
 
     /* Sleek Distinct Top Borders */
@@ -263,7 +263,7 @@ else:
     cart_item_count = sum(st.session_state.cart.values())
     cart_total_price = sum(next(p['price'] for p in PRODUCTS if p['id'] == pid) * qty for pid, qty in st.session_state.cart.items())
 
-    # --- NAVIGATION ARCHITECTURE SIDEBAR (Black & Beige Color Matrix) ---
+    # --- NAVIGATION ARCHITECTURE SIDEBAR (Inverted Base Matrix) ---
     with st.sidebar:
         st.markdown("<br><div class='nav-header'>Chinar Directory</div>", unsafe_allow_html=True)
         selected = option_menu(
@@ -335,17 +335,17 @@ else:
                         <div class="inner-black-box">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                                 <div style="display: flex; align-items: center; gap: 25px;">
-                                    <div style="font-size: 2rem; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; border: 1px solid #f5f5dc;">{item['image']}</div>
+                                    <div style="font-size: 2rem; background: rgba(0,0,0,0.05); padding: 10px 20px; border-radius: 12px; border: 1px solid #000000;">{item['image']}</div>
                                     <div>
-                                        <div style="font-family:'Syne'; font-weight:500; font-size:1.3rem; color:#f5f5dc;">{item['name']}</div>
-                                        <div style="color:#f5f5dc; font-size:0.8rem;">Limited Production Manifest: <span style="font-weight:500; color:#f5f5dc;">{item['stock']} units remain</span></div>
+                                        <div style="font-family:'Syne'; font-weight:500; font-size:1.3rem; color:#000000;">{item['name']}</div>
+                                        <div style="color:#000000; font-size:0.8rem;">Limited Production Manifest: <span style="font-weight:500; color:#000000;">{item['stock']} units remain</span></div>
                                     </div>
                                 </div>
                     """, unsafe_allow_html=True)
                     
                     action_col1, action_col2 = st.columns([2, 1])
                     with action_col1:
-                        st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#f5f5dc; font-size:1.4rem;">${item["price"]:,.2f}</div>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#000000; font-size:1.4rem;">${item["price"]:,.2f}</div>', unsafe_allow_html=True)
                     with action_col2:
                         if st.button("Acquire Lot Assignment", key=f"acq_{item['id']}", use_container_width=True):
                             st.session_state.cart[item['id']] = st.session_state.cart.get(item['id'], 0) + 1
@@ -366,14 +366,14 @@ else:
                     <div class="inner-black-box" style="padding: 16px 24px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
                             <div>
-                                <span style="font-size:1.15rem; font-weight:bold; color:#f5f5dc;">{item_details['name']}</span>
-                                <span style="font-size:0.85rem; font-family:'Plus Jakarta Sans'; margin-left:20px; color:#f5f5dc;">LOT YIELD: {qty}</span>
+                                <span style="font-size:1.15rem; font-weight:bold; color:#000000;">{item_details['name']}</span>
+                                <span style="font-size:0.85rem; font-family:'Plus Jakarta Sans'; margin-left:20px; color:#000000;">LOT YIELD: {qty}</span>
                             </div>
                 """, unsafe_allow_html=True)
                 
                 c_price, c_btn = st.columns([3, 1])
                 with c_price:
-                    st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#f5f5dc; font-size:1.4rem;">${item_details["price"] * qty:,.2f}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#000000; font-size:1.4rem;">${item_details["price"] * qty:,.2f}</div>', unsafe_allow_html=True)
                 with c_btn:
                     if st.button("Release Unit Allocation", key=f"rel_{pid}", use_container_width=True):
                         del st.session_state.cart[pid]
@@ -388,9 +388,9 @@ else:
         else:
             st.markdown(f"""
                 <div class="inner-black-box" style="text-align: center; padding: 45px 20px;">
-                    <p style="font-family:'Plus Jakarta Sans'; text-transform:uppercase; letter-spacing:0.05em; margin:0; font-size:0.75rem; color:#f5f5dc;">Consolidated Bill Gross Balance</p>
-                    <div style="font-size: 3.2rem; font-weight:600; margin: 15px 0; font-family:'Syne'; color:#f5f5dc;">${cart_total_price:,.2f}</div>
-                    <p style="font-size:0.85rem; max-width:520px; margin:0 auto 30px auto; font-family:'Plus Jakarta Sans'; line-height:1.6; color:#f5f5dc;">Confirming this data stream sets customized logistics chains in motion. Premium white-glove line deliveries will be routed immediately to your designated estate parameters.</p>
+                    <p style="font-family:'Plus Jakarta Sans'; text-transform:uppercase; letter-spacing:0.05em; margin:0; font-size:0.75rem; color:#000000;">Consolidated Bill Gross Balance</p>
+                    <div style="font-size: 3.2rem; font-weight:600; margin: 15px 0; font-family:'Syne'; color:#000000;">${cart_total_price:,.2f}</div>
+                    <p style="font-size:0.85rem; max-width:520px; margin:0 auto 30px auto; font-family:'Plus Jakarta Sans'; line-height:1.6; color:#000000;">Confirming this data stream sets customized logistics chains in motion. Premium white-glove line deliveries will be routed immediately to your designated estate parameters.</p>
                 </div>
             """, unsafe_allow_html=True)
             
