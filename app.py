@@ -369,7 +369,7 @@ else:
             st.markdown(f"""
                 <div class="inner-black-box" style="text-align: center; padding: 45px 20px;">
                     <p style="font-family:'Plus Jakarta Sans'; text-transform:uppercase; letter-spacing:0.05em; margin:0; font-size:0.75rem; color:#f5f5dc;">Consolidated Bill Gross Balance</p>
-                    <div style="font-size: 3.2rem; font-weight:600; margin: 15px 0; font-family:'Syne'; color:#f5f5dc;">${cart_total_price:,.2f}</div>
+                    <div style="font-size: 3.2rem; font-weight:600; margin: 15px 0; font-family:'Syne'; color:#000000;">${cart_total_price:,.2f}</div>
                     <p style="font-size:0.85rem; max-width:520px; margin:0 auto 30px auto; font-family:'Plus Jakarta Sans'; line-height:1.6; color:#f5f5dc;">Confirming this data stream sets customized logistics chains in motion. Premium white-glove line deliveries will be routed immediately to your designated estate parameters.</p>
                 </div>
             """, unsafe_allow_html=True)
