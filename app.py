@@ -4,6 +4,7 @@ import numpy as np
 import plotly.express as px
 from streamlit_option_menu import option_menu
 
+# --- 1. PREMIUM PRODUCTION INITIALIZATION ---
 st.set_page_config(
     page_title="Chinar & Co. | Heritage Luxury Atelier",
     page_icon="🇵🇰",
@@ -11,16 +12,19 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# Initialize Session States for Navigation Locking
 if 'app_unlocked' not in st.session_state:
     st.session_state.app_unlocked = False
 
 if 'cart' not in st.session_state:
     st.session_state.cart = {}
 
+# --- 2. ELITE MINIMALIST UI CSS INJECTION ---
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600&family=Syne:wght=400;500;600&display=swap');
 
+    /* Persistent Canvas Overrides with Bright 3D Luxury Room Background */
     .stApp {
         background-image: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)), 
                           url('https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1920&q=80') !important;
@@ -30,8 +34,9 @@ st.markdown("""
     }
     header, footer {visibility: hidden !important;}
     
+    /* Modernist Minimal Container Card Matrix */
     .luxury-card {
-        background: rgba(28, 25, 23, 0.85);
+        background: rgba(245, 245, 220, 0.85);
         backdrop-filter: blur(24px);
         -webkit-backdrop-filter: blur(24px);
         border: 1px solid rgba(245, 245, 220, 0.2);
@@ -47,22 +52,24 @@ st.markdown("""
         transform: translateY(-3px);
     }
     
-    /* Black boxes — beige text for readability on black background */
+    /* Inner Page Beige Boxes containing Black Items */
     .inner-black-box {
-        background-color: #000000 !important;
-        border: 1px solid #f5f5dc;
+        background-color: #f5f5dc !important;
+        border: 1px solid #000000;
         padding: 15px;
         border-radius: 8px;
         margin-bottom: 10px;
     }
     .inner-black-box p, .inner-black-box span, .inner-black-box div {
-        color: #f5f5dc !important;
+        color: #000000 !important;
     }
 
+    /* Sleek Distinct Top Borders */
     .gold-accent-line {
         border-top: 2px solid #000000 !important;
     }
     
+    /* Typography Overrides */
     .brand-title {
         font-family: 'Syne', sans-serif;
         font-weight: 600;
@@ -81,6 +88,7 @@ st.markdown("""
         font-weight: 400;
     }
     
+    /* Item Typography */
     .item-title {
         font-family: 'Syne', sans-serif;
         font-weight: 500;
@@ -96,6 +104,7 @@ st.markdown("""
         margin-top: 4px;
     }
     
+    /* Pricing Badge UI Elements */
     .gold-price-tag {
         font-family: 'Plus Jakarta Sans', sans-serif;
         color: #000000 !important;
@@ -104,16 +113,18 @@ st.markdown("""
         letter-spacing: -0.01em;
     }
     
+    /* Navigation Header Component */
     .nav-header {
         font-family: 'Syne', sans-serif;
         font-weight: 500;
         letter-spacing: 0.05em;
-        color: #f5f5dc !important;
+        color: #000000 !important;
         margin-bottom: 20px;
         font-size: 1.1rem;
         text-align: center;
     }
 
+    /* Elegant Custom Overrides for Streamlit Forms and Inputs */
     div[data-baseweb="input"] {
         background-color: rgba(0, 0, 0, 0.05) !important;
         border: 1px solid rgba(0, 0, 0, 0.2) !important;
@@ -125,39 +136,41 @@ st.markdown("""
         font-size: 0.9rem;
     }
     
-    /* Metric labels/values inside black boxes — override to beige */
+    /* Custom modifications for Streamlit default metrics */
     div[data-testid="stMetricValue"] {
         font-family: 'Syne', sans-serif !important;
-        color: #f5f5dc !important;
+        color: #000000 !important;
         font-size: 1.8rem !important;
         font-weight: 500 !important;
     }
     div[data-testid="stMetricLabel"] {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
-        color: #f5f5dc !important;
+        color: #222222 !important;
         letter-spacing: 0.05em !important;
         font-size: 0.75rem !important;
     }
 
+    /* Global Square Welcome Button Layout */
     .stButton > button {
-        background: #f5f5dc !important;
-        color: #000000 !important;
-        border: 2px solid #000000 !important;
+        background: #000000 !important;
+        color: #f5f5dc !important;
+        border: 2px solid #f5f5dc !important;
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         letter-spacing: 0.02em !important;
         font-weight: bold !important;
         font-size: 0.95rem !important;
-        border-radius: 0px !important;
+        border-radius: 0px !important; /* Strict Square Shape */
         padding: 12px 24px !important;
         transition: all 0.3s ease !important;
     }
     .stButton > button:hover {
-        color: #f5f5dc !important;
-        border: 2px solid #f5f5dc !important;
-        background: #000000 !important;
+        color: #000000 !important;
+        border: 2px solid #000000 !important;
+        background: #f5f5dc !important;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
     }
 
+    /* Fix Tab Item Styling to match Minimalist Modern theme */
     button[data-baseweb="tab"] {
         font-family: 'Plus Jakarta Sans', sans-serif !important;
         font-size: 0.8rem !important;
@@ -168,17 +181,18 @@ st.markdown("""
         font-weight: bold !important;
     }
     
-    /* Outside black boxes — text stays black for readability on white/light background */
+    /* Global Text Elements to Black Color on Inner Content */
     p, span, label, h1, h2, h3, h4, h5, h6 {
         color: #000000 !important;
     }
     
+    /* Sidebar Structure Background Tweaks */
     section[data-testid="stSidebar"] {
-        background-color: #000000 !important;
-        border-right: 1px solid #f5f5dc;
+        background-color: #f5f5dc !important;
+        border-right: 1px solid #000000;
     }
     section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span {
-        color: #f5f5dc !important;
+        color: #000000 !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -201,6 +215,7 @@ PRODUCTS = [
     {"id": 15, "name": "Marble Vase", "price": 199, "category": "decor", "image": "🪴", "stock": 35}
 ]
 
+# --- 3. REFINED ATELIER HEADER ---
 st.markdown("""
     <div style="display: flex; justify-content: space-between; align-items: flex-end; padding: 20px 0 25px 0; border-bottom: 2px solid #000000; margin-bottom: 40px;">
         <div>
@@ -215,18 +230,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
+# --- 4. CONDITIONAL CONDENSED ARCHITECTURE SYSTEM ---
 if not st.session_state.app_unlocked:
+    # LANDING GATEWAY: Show only Developer Info card and Unlock Application controls
     st.markdown("<h4 style='font-family:\"Syne\"; font-weight:bold; color:#000000; margin-bottom:25px;'>PROJECT DEPLOYMENT INFORMATION</h4>", unsafe_allow_html=True)
     st.markdown("""
         <div style="background: rgba(255, 255, 255, 0.9); border: 2px solid #000000; padding: 40px 30px; margin-bottom: 20px;">
             <h2 style="font-family:'Syne'; color:#000000; font-weight:600; margin-bottom:5px;">Amna Mudassar Ali</h2>
             <p style="font-family:'Plus Jakarta Sans'; color:#111111; font-size:1.05rem; letter-spacing:0.02em; font-weight:400; margin-bottom:25px;">
-                Artificial Intelligence developer
+                Lead System Architect & Developer
             </p>
             <hr style="border: 0; border-top: 2px solid #000000; margin-bottom:25px;">
             <div style="display: grid; grid-template-columns: 140px 1fr; row-gap: 15px; font-family:'Plus Jakarta Sans'; font-size:0.95rem; line-height:1.6; color: #000000;">
                 <div style="color:#000000; font-weight:bold;">Academic Status:</div>
-                <div style="color:#000000;">Student of Second Semester</div>
+                <div style="color:#000000;">Student of First Semester</div>
                 <div style="color:#000000; font-weight:bold;">Institution:</div>
                 <div style="color:#000000;">International Islamic University, Islamabad (IIUI)</div>
                 <div style="color:#000000; font-weight:bold;">Classification:</div>
@@ -243,25 +260,28 @@ if not st.session_state.app_unlocked:
         st.rerun()
 
 else:
+    # APP UNLOCKED: Expose full feature pipeline matrix
     cart_item_count = sum(st.session_state.cart.values())
     cart_total_price = sum(next(p['price'] for p in PRODUCTS if p['id'] == pid) * qty for pid, qty in st.session_state.cart.items())
 
+    # --- NAVIGATION ARCHITECTURE SIDEBAR (Beige & Black Color Matrix) ---
     with st.sidebar:
         st.markdown("<br><div class='nav-header'>Chinar Directory</div>", unsafe_allow_html=True)
         selected = option_menu(
             menu_title=None,
-            options=["Catalog", "Cart", "Checkout", "Dashboard", "Return to main page"],
+            options=["Catalog", "Cart", "Checkout", "Dashboard", "Return to Developer Info"],
             icons=["grid", "bag", "credit-card", "pie-chart", "info-circle"],
             menu_icon="cast",
             default_index=0,
             styles={
-                "container": {"padding": "5px!important", "background-color": "#000000"},
-                "icon": {"color": "#f5f5dc", "font-size": "14px"}, 
-                "nav-link": {"font-size": "13px", "text-align": "left", "margin":"6px", "color":"#f5f5dc", "background-color": "#000000", "font-family": "Plus Jakarta Sans", "border": "1px solid #f5f5dc"},
-                "nav-link-selected": {"background-color": "#f5f5dc", "color": "#000000", "font-weight": "bold"},
+                "container": {"padding": "5px!important", "background-color": "#f5f5dc"},
+                "icon": {"color": "#000000", "font-size": "14px"}, 
+                "nav-link": {"font-size": "13px", "text-align": "left", "margin":"6px", "color":"#000000", "background-color": "#f5f5dc", "font-family": "Plus Jakarta Sans", "border": "1px solid #000000"},
+                "nav-link-selected": {"background-color": "#000000", "color": "#f5f5dc", "font-weight": "bold"},
             }
         )
 
+    # --- ATELIER PERFORMANCE OVERLAYS ---
     metric_col1, metric_col2, metric_col3, metric_col4 = st.columns(4)
 
     with metric_col1:
@@ -284,6 +304,7 @@ else:
         st.metric("Available Vault Stock", f"{sum(p['stock'] for p in PRODUCTS)} Units")
         st.markdown('</div>', unsafe_allow_html=True)
 
+    # --- ROUTING CORE MODULES ---
     if selected == "Return to Developer Info":
         st.session_state.app_unlocked = False
         st.rerun()
@@ -315,17 +336,17 @@ else:
                         <div class="inner-black-box">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
                                 <div style="display: flex; align-items: center; gap: 25px;">
-                                    <div style="font-size: 2rem; background: rgba(255,255,255,0.1); padding: 10px 20px; border-radius: 12px; border: 1px solid #f5f5dc;">{item['image']}</div>
+                                    <div style="font-size: 2rem; background: rgba(0,0,0,0.05); padding: 10px 20px; border-radius: 12px; border: 1px solid #000000;">{item['image']}</div>
                                     <div>
-                                        <div style="font-family:'Syne'; font-weight:500; font-size:1.3rem; color:#f5f5dc;">{item['name']}</div>
-                                        <div style="color:#f5f5dc; font-size:0.8rem;">Limited Production Manifest: <span style="font-weight:500; color:#f5f5dc;">{item['stock']} units remain</span></div>
+                                        <div style="font-family:'Syne'; font-weight:500; font-size:1.3rem; color:#000000;">{item['name']}</div>
+                                        <div style="color:#000000; font-size:0.8rem;">Limited Production Manifest: <span style="font-weight:500; color:#000000;">{item['stock']} units remain</span></div>
                                     </div>
                                 </div>
                     """, unsafe_allow_html=True)
                     
                     action_col1, action_col2 = st.columns([2, 1])
                     with action_col1:
-                        st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#f5f5dc; font-size:1.4rem;">${item["price"]:,.2f}</div>', unsafe_allow_html=True)
+                        st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#000000; font-size:1.4rem;">${item["price"]:,.2f}</div>', unsafe_allow_html=True)
                     with action_col2:
                         if st.button("Acquire Lot Assignment", key=f"acq_{item['id']}", use_container_width=True):
                             st.session_state.cart[item['id']] = st.session_state.cart.get(item['id'], 0) + 1
@@ -337,7 +358,7 @@ else:
     elif selected == "Cart":
         st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#000000; margin-bottom:25px;'>YOUR SELECTION PORTFOLIO</h4>", unsafe_allow_html=True)
         if not st.session_state.cart:
-            st.markdown("<div class='inner-black-box'><span style='color:#f5f5dc;'>Your structural portfolio selection layout is currently empty.</span></div>", unsafe_allow_html=True)
+            st.markdown("<div class='inner-black-box'>Your structural portfolio selection layout is currently empty.</div>", unsafe_allow_html=True)
         else:
             for pid, qty in list(st.session_state.cart.items()):
                 item_details = next(p for p in PRODUCTS if p['id'] == pid)
@@ -346,14 +367,14 @@ else:
                     <div class="inner-black-box" style="padding: 16px 24px;">
                         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
                             <div>
-                                <span style="font-size:1.15rem; font-weight:bold; color:#f5f5dc;">{item_details['name']}</span>
-                                <span style="font-size:0.85rem; font-family:'Plus Jakarta Sans'; margin-left:20px; color:#f5f5dc;">LOT YIELD: {qty}</span>
+                                <span style="font-size:1.15rem; font-weight:bold; color:#000000;">{item_details['name']}</span>
+                                <span style="font-size:0.85rem; font-family:'Plus Jakarta Sans'; margin-left:20px; color:#000000;">LOT YIELD: {qty}</span>
                             </div>
                 """, unsafe_allow_html=True)
                 
                 c_price, c_btn = st.columns([3, 1])
                 with c_price:
-                    st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#f5f5dc; font-size:1.4rem;">${item_details["price"] * qty:,.2f}</div>', unsafe_allow_html=True)
+                    st.markdown(f'<div style="text-align:right; padding-top:4px; font-weight:bold; color:#000000; font-size:1.4rem;">${item_details["price"] * qty:,.2f}</div>', unsafe_allow_html=True)
                 with c_btn:
                     if st.button("Release Unit Allocation", key=f"rel_{pid}", use_container_width=True):
                         del st.session_state.cart[pid]
@@ -364,13 +385,13 @@ else:
     elif selected == "Checkout":
         st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#000000; margin-bottom:25px;'>SECURE ESCROW TRANSFERS</h4>", unsafe_allow_html=True)
         if not st.session_state.cart:
-            st.markdown("<div class='inner-black-box'><span style='color:#f5f5dc;'>Your current portfolio allocation is dry. Transaction engines cannot initialize without asset parameters.</span></div>", unsafe_allow_html=True)
+            st.markdown("<div class='inner-black-box'>Your current portfolio allocation is dry. Transaction engines cannot initialize without asset parameters.</div>", unsafe_allow_html=True)
         else:
             st.markdown(f"""
                 <div class="inner-black-box" style="text-align: center; padding: 45px 20px;">
-                    <p style="font-family:'Plus Jakarta Sans'; text-transform:uppercase; letter-spacing:0.05em; margin:0; font-size:0.75rem; color:#f5f5dc;">Consolidated Bill Gross Balance</p>
+                    <p style="font-family:'Plus Jakarta Sans'; text-transform:uppercase; letter-spacing:0.05em; margin:0; font-size:0.75rem; color:#000000;">Consolidated Bill Gross Balance</p>
                     <div style="font-size: 3.2rem; font-weight:600; margin: 15px 0; font-family:'Syne'; color:#000000;">${cart_total_price:,.2f}</div>
-                    <p style="font-size:0.85rem; max-width:520px; margin:0 auto 30px auto; font-family:'Plus Jakarta Sans'; line-height:1.6; color:#f5f5dc;">Confirming this data stream sets customized logistics chains in motion. Premium white-glove line deliveries will be routed immediately to your designated estate parameters.</p>
+                    <p style="font-size:0.85rem; max-width:520px; margin:0 auto 30px auto; font-family:'Plus Jakarta Sans'; line-height:1.6; color:#000000;">Confirming this data stream sets customized logistics chains in motion. Premium white-glove line deliveries will be routed immediately to your designated estate parameters.</p>
                 </div>
             """, unsafe_allow_html=True)
             
@@ -384,6 +405,7 @@ else:
         st.markdown("<h4 style='font-family:\"Syne\"; font-weight:500; color:#000000; margin-bottom:25px;'>ATELIER MARKET DEPLOYMENT LOGS</h4>", unsafe_allow_html=True)
         df = pd.DataFrame(PRODUCTS)
         
+        # Dark Accent Color Palette for Data Visibility
         black_luxury_colors = ['#000000', '#222222', '#444444', '#666666', '#888888']
         
         fig_scatter = px.scatter(
