@@ -284,7 +284,7 @@ else:
         st.metric("Available Vault Stock", f"{sum(p['stock'] for p in PRODUCTS)} Units")
         st.markdown('</div>', unsafe_allow_html=True)
 
-    if selected == "Return to Developer Info":
+    if selected == "Return to main page":
         st.session_state.app_unlocked = False
         st.rerun()
 
