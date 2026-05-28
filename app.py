@@ -168,16 +168,17 @@ st.markdown("""
         font-weight: bold !important;
     }
     
-    /* Outside black boxes — text stays black for readability on white/light background */
-    p, span, label, h1, h2, h3, h4, h5, h6 {
+    /* Global Content Rules — targets main panel only */
+    .stMain p, .stMain span, .stMain label, .stMain h1, .stMain h2, .stMain h3, .stMain h4, .stMain h5, .stMain h6 {
         color: #000000 !important;
     }
     
+    /* Fixed Sidebar Rules */
     section[data-testid="stSidebar"] {
         background-color: #000000 !important;
-        border-right: 1px solid #f5f5dc;
+        border-right: 1px solid #f5f5dc !important;
     }
-    section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span {
+    section[data-testid="stSidebar"] div, section[data-testid="stSidebar"] p, section[data-testid="stSidebar"] span, section[data-testid="stSidebar"] label {
         color: #f5f5dc !important;
     }
     </style>
@@ -247,7 +248,7 @@ else:
     cart_total_price = sum(next(p['price'] for p in PRODUCTS if p['id'] == pid) * qty for pid, qty in st.session_state.cart.items())
 
     with st.sidebar:
-        st.markdown("<br><div class='nav-header'>Chinar Directory</div>", unsafe_allow_html=True)
+        st.markdown("<div class='nav-header'>Chinar Directory</div>", unsafe_allow_html=True)
         selected = option_menu(
             menu_title=None,
             options=["Catalog", "Cart", "Checkout", "Dashboard", "Return to main page"],
