@@ -162,7 +162,7 @@ def apply_custom_css():
 # -----------------------------------------------------------------------------
 def init_session_state():
     """Ensures necessary session state key-value pairs are properly initialized."""
-    if "current_page" not in st.mutable_session_state:
+    if "current_page" not in st.session_state:
         st.session_state["current_page"] = "Home"
     if "gallery" not in st.session_state:
         st.session_state["gallery"] = []
@@ -506,7 +506,6 @@ def designer_page():
         st.markdown('<div class="section-header">6. Existing Room Photograph (Optional)</div>', unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Upload reference photo", type=["jpg", "jpeg", "png"])
         
-        # Developer Note regarding Image-to-Image / ControlNet integration
         st.caption(
             "*Note for Engineers: Uploaded photographs can be processed via Stable Diffusion ControlNet "
             "(MLSD / Depth Estimation pipeline) to preserve structural wall geometry while redesigning interior elements.*"
