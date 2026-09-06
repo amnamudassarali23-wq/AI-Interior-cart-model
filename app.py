@@ -7,11 +7,12 @@ A SaaS-grade Streamlit web application utilizing AI for interior design visualiz
 import os
 import io
 import time
+import urllib.parse
 import requests
 from typing import Tuple, Optional
 
 import streamlit as st
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 # -----------------------------------------------------------------------------
 # Streamlit Page Configuration
@@ -203,86 +204,59 @@ def build_design_prompt(
     flooring: str,
     additional_reqs: str
 ) -> Tuple[str, str]:
-    """Assembles structured inputs into an optimized text prompt."""
+    """Assembles structured inputs into an optimized, photorealistic text prompt."""
     
     if color_preset != "Custom":
-        color_description = f"{color_preset.lower()} color scheme"
+        color_description = f"{color_preset} color scheme"
     else:
-        color_description = f"palette with primary {primary_color}, secondary {secondary_color}, and accent {accent_color}"
+        color_description = f"custom palette with primary hex {primary_color}, secondary hex {secondary_color}, and accent hex {accent_color}"
 
-    furniture_str = ", ".join(furniture) if furniture else "balanced essential furniture"
+    furniture_str = ", ".join(furniture) if furniture else "minimal essential furniture"
 
     positive_prompt = (
-        f"A photorealistic architectural interior design photo of a {room_size.lower()} {room_shape.lower()} {room_type.lower()}. "
-        f"Design Style: {style}. Color Palette: {color_description}. "
-        f"Furniture: {furniture_str}. Flooring: {flooring}. Lighting: {lighting}. "
+        f"A ultra-realistic high-end interior architecture photo of a {room_size.lower()} {room_shape.lower()} {room_type.lower()}. "
+        f"Style: {style} interior design. Color theme: {color_description}. "
+        f"Furniture included: {furniture_str}. Flooring: {flooring}. Lighting: {lighting}. "
     )
 
     if additional_reqs.strip():
-        positive_prompt += f"Details: {additional_reqs.strip()}. "
+        positive_prompt += f"Specific elements: {additional_reqs.strip()}. "
 
-    positive_prompt += "Architectural digest, 8k resolution, realistic lighting, high detail materials."
+    positive_prompt += (
+        "Architectural Digest, realistic lighting, 8k resolution, ray-tracing, detailed textures, clean composition, soft shadows, magazine aesthetic."
+    )
 
-    negative_prompt = "blurry, low quality, distorted furniture, bad perspective, watermark, clutter."
+    negative_prompt = "blurry, dark, ugly, deformed furniture, text, watermark, bad architecture, warped walls, low quality, noise"
 
     return positive_prompt, negative_prompt
 
 
 # -----------------------------------------------------------------------------
-# Cloud-Safe Image Generator (HF API + Fallback Renderer)
+# Fast High-Quality Cloud AI Image Generator
 # -----------------------------------------------------------------------------
-def generate_interior_design(prompt: str, hf_token: str = "") -> Image.Image:
-    """Generates an image via Hugging Face Inference API or returns an elegant design preview canvas."""
-    
-    # 1. Try Hugging Face API if Token Provided
-    if hf_token.strip():
-        try:
-            API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
-            headers = {"Authorization": f"Bearer {hf_token.strip()}"}
-            payload = {"inputs": prompt}
-            
-            response = requests.post(API_URL, headers=headers, json=payload, timeout=20)
-            if response.status_code == 200:
-                image = Image.open(io.BytesIO(response.content))
-                return image
-            else:
-                st.warning(f"Hugging Face API returned status {response.status_code}. Using cloud preview mode.")
-        except Exception as e:
-            st.warning(f"API connection error: {str(e)}. Using cloud preview mode.")
-
-    # 2. Fast Cloud-Safe Visual Render Fallback
-    time.sleep(1.5)  # Simulate generation delay safely
-    
-    img = Image.new("RGB", (1024, 768), color=(11, 37, 69))
-    draw = ImageDraw.Draw(img)
-    
-    # Draw an architectural frame box inside
-    draw.rectangle([40, 40, 984, 728], outline=(197, 160, 89), width=3)
-    draw.rectangle([60, 60, 964, 708], fill=(253, 251, 247))
-    
-    # Text overlay
-    draw.text((100, 100), "AI INTERIOR DESIGN CONCEPT", fill=(11, 37, 69))
-    draw.text((100, 140), "--------------------------------------------------", fill=(197, 160, 89))
-    
-    # Wrap prompt text cleanly
-    words = prompt.split(" ")
-    lines, current_line = [], ""
-    for word in words:
-        if len(current_line + " " + word) < 65:
-            current_line += " " + word
-        else:
-            lines.append(current_line)
-            current_line = word
-    lines.append(current_line)
-    
-    y = 180
-    for line in lines[:10]:
-        draw.text((100, y), line.strip(), fill=(19, 49, 92))
-        y += 35
+def generate_interior_design(prompt: str, seed: Optional[int] = None) -> Optional[Image.Image]:
+    """Generates real photorealistic interior design images using cloud inference."""
+    try:
+        encoded_prompt = urllib.parse.quote(prompt)
         
-    draw.text((100, 640), "✨ Rendered in Cloud-Safe Mode | Developer: Amna Mudassar Ali", fill=(197, 160, 89))
-    
-    return img
+        # Use random seed to give unique renders every time
+        if seed is None:
+            seed = int(time.time())
+            
+        # Pollinations AI Endpoint (Free, fast, high-quality, no memory crash on Streamlit Cloud)
+        image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=768&seed={seed}&nologo=true&model=flux"
+        
+        response = requests.get(image_url, timeout=30)
+        
+        if response.status_code == 200:
+            img = Image.open(io.BytesIO(response.content))
+            return img
+        else:
+            st.error("Failed to fetch image from AI engine. Please try again.")
+            return None
+    except Exception as e:
+        st.error(f"Error during image generation: {str(e)}")
+        return None
 
 
 # -----------------------------------------------------------------------------
@@ -320,7 +294,7 @@ def home_page():
             """
             <div class="glass-card">
                 <h3 style="color:#0B2545; font-family:'Playfair Display', serif;">✨ Intelligent Synthesis</h3>
-                <p style="color:#13315C; font-size:0.9rem;">Generate bespoke spatial concepts using tailored prompt engineering.</p>
+                <p style="color:#13315C; font-size:0.9rem;">Generate bespoke spatial concepts using tailored architectural prompts.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -352,7 +326,7 @@ def home_page():
 # -----------------------------------------------------------------------------
 def designer_page():
     st.markdown('<div class="section-header">AI Interior Studio</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#13315C; margin-bottom:20px;">Configure room parameters below to generate your design concept.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#13315C; margin-bottom:20px;">Configure room parameters below to generate your customized design concept.</p>', unsafe_allow_html=True)
 
     col_left, col_right = st.columns([1.1, 0.9], gap="large")
 
@@ -480,10 +454,8 @@ def designer_page():
             with st.expander("🔍 View Compiled Prompt", expanded=False):
                 st.code(f"POSITIVE PROMPT:\n{pos_prompt}", language="text")
 
-            hf_token = st.session_state.get("hf_token", "")
-
-            with st.spinner("AI is rendering your interior design concept..."):
-                generated_image = generate_interior_design(pos_prompt, hf_token=hf_token)
+            with st.spinner("AI is generating your customized interior design image..."):
+                generated_image = generate_interior_design(pos_prompt)
 
             if generated_image:
                 st.session_state["last_generated"] = {
@@ -509,7 +481,7 @@ def designer_page():
                     st.caption("Existing Space")
                     st.image(res["uploaded_image"], use_container_width=True)
                 with b_col2:
-                    st.caption("AI Concept")
+                    st.caption("AI Design Concept")
                     st.image(res["image"], use_container_width=True)
             else:
                 st.image(res["image"], use_container_width=True)
@@ -548,7 +520,7 @@ def designer_page():
 
             st.markdown('</div>', unsafe_allow_html=True)
         else:
-            st.info("Configure options on the left and click 'Generate My Interior Design' to create your concept.")
+            st.info("Configure options on the left and click 'Generate My Interior Design' to create your customized concept.")
 
 
 # -----------------------------------------------------------------------------
@@ -628,11 +600,6 @@ def main():
         )
 
         st.session_state["current_page"] = nav_selection
-
-        st.markdown("---")
-        st.markdown("<p style='font-size:0.85rem; color:#FDFBF7;'>🔑 Hugging Face API Token (Optional):</p>", unsafe_allow_html=True)
-        hf_token_input = st.text_input("HF Token", type="password", help="Enter free HuggingFace token for live SDXL cloud rendering", label_visibility="collapsed")
-        st.session_state["hf_token"] = hf_token_input
 
         st.markdown("---")
         st.markdown("<p style='font-size:0.8rem; color:#E0E6ED;'>Developer:<br><strong>Amna Mudassar Ali</strong><br><span style='color:#C5A059;'>amnamudassarali23@gmail.com</span></p>", unsafe_allow_html=True)
