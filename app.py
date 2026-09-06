@@ -239,11 +239,9 @@ def generate_interior_design(prompt: str, seed: Optional[int] = None) -> Optiona
     try:
         encoded_prompt = urllib.parse.quote(prompt)
         
-        # Use random seed to give unique renders every time
         if seed is None:
             seed = int(time.time())
             
-        # Pollinations AI Endpoint (Free, fast, high-quality, no memory crash on Streamlit Cloud)
         image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=768&seed={seed}&nologo=true&model=flux"
         
         response = requests.get(image_url, timeout=30)
@@ -588,22 +586,40 @@ def main():
     apply_custom_css()
     init_session_state()
 
+    # -------------------------------------------------------------------------
+    # SIDEBAR NAVIGATION
+    # -------------------------------------------------------------------------
     with st.sidebar:
-        st.markdown("<h2 style='font-family:\"Playfair Display\", serif; color:#FDFBF7;'>🏛️ AI Interior</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='font-family:\"Playfair Display\", serif; color:#FDFBF7;'>🏛️ Navigation Menu</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color:#C5A059; font-size:0.85rem;'>NavBlue & Cream Studio Edition</p>", unsafe_allow_html=True)
         st.markdown("---")
 
+        options = ["Home", "AI Designer", "Design Gallery", "About"]
+        current = st.session_state.get("current_page", "Home")
+        current_index = options.index(current) if current in options else 0
+
         nav_selection = st.radio(
-            "Navigation",
-            ["Home", "AI Designer", "Design Gallery", "About"],
-            index=["Home", "AI Designer", "Design Gallery", "About"].index(st.session_state["current_page"])
+            "Select Page",
+            options,
+            index=current_index,
+            key="sidebar_navigation_radio"
         )
 
         st.session_state["current_page"] = nav_selection
 
         st.markdown("---")
-        st.markdown("<p style='font-size:0.8rem; color:#E0E6ED;'>Developer:<br><strong>Amna Mudassar Ali</strong><br><span style='color:#C5A059;'>amnamudassarali23@gmail.com</span></p>", unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div style="font-size:0.8rem; color:#E0E6ED;">
+                <strong>Lead Developer:</strong><br>
+                Amna Mudassar Ali<br>
+                <span style="color:#C5A059;">amnamudassarali23@gmail.com</span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
 
+    # Render selected page view
     if st.session_state["current_page"] == "Home":
         home_page()
     elif st.session_state["current_page"] == "AI Designer":
