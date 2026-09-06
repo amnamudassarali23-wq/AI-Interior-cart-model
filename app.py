@@ -133,6 +133,22 @@ def apply_custom_css():
         color: #FDFBF7 !important;
     }
 
+    /* Styling specifically for sidebar buttons */
+    section[data-testid="stSidebar"] .stButton>button {
+        background: rgba(253, 251, 247, 0.08) !important;
+        color: #FDFBF7 !important;
+        border: 1px solid rgba(197, 160, 89, 0.3) !important;
+        margin-bottom: 8px !important;
+        text-align: left !important;
+        padding: 12px 18px !important;
+    }
+
+    section[data-testid="stSidebar"] .stButton>button:hover {
+        background: #C5A059 !important;
+        color: #0B2545 !important;
+        border-color: #C5A059 !important;
+    }
+
     .section-header {
         font-family: 'Playfair Display', serif;
         font-size: 1.4rem;
@@ -586,27 +602,28 @@ def main():
     apply_custom_css()
     init_session_state()
 
-    # Callback to synchronize radio button selection with session state
-    def update_navigation():
-        st.session_state["current_page"] = st.session_state["nav_selection_radio"]
-
-    # Sidebar Navigation Menu
+    # Sidebar Navigation with Dedicated Buttons
     with st.sidebar:
-        st.markdown("<h2 style='font-family:\"Playfair Display\", serif; color:#FDFBF7;'>🏛️ Navigation Menu</h2>", unsafe_allow_html=True)
+        st.markdown("<h2 style='font-family:\"Playfair Display\", serif; color:#FDFBF7;'>🏛️ Navigation</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color:#C5A059; font-size:0.85rem;'>NavBlue & Cream Studio Edition</p>", unsafe_allow_html=True)
         st.markdown("---")
 
-        options = ["Home", "AI Designer", "Design Gallery", "About"]
-        current = st.session_state.get("current_page", "Home")
-        current_index = options.index(current) if current in options else 0
+        # Sidebar navigation buttons
+        if st.button("🏠 Home Page", key="sb_btn_home"):
+            st.session_state["current_page"] = "Home"
+            st.rerun()
 
-        st.radio(
-            "Select Page",
-            options,
-            index=current_index,
-            key="nav_selection_radio",
-            on_change=update_navigation
-        )
+        if st.button("🎨 AI Designer", key="sb_btn_designer"):
+            st.session_state["current_page"] = "AI Designer"
+            st.rerun()
+
+        if st.button("🖼️ Design Gallery", key="sb_btn_gallery"):
+            st.session_state["current_page"] = "Design Gallery"
+            st.rerun()
+
+        if st.button("ℹ️ About", key="sb_btn_about"):
+            st.session_state["current_page"] = "About"
+            st.rerun()
 
         st.markdown("---")
         st.markdown(
