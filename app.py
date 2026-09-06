@@ -125,15 +125,17 @@ def apply_custom_css():
         transform: translateY(-2px);
     }
 
+    /* Sidebar Visible Fix & Navigation Buttons Styling */
     section[data-testid="stSidebar"] {
         background-color: #0B2545 !important;
+        min-width: 280px !important;
+        max-width: 320px !important;
     }
 
     section[data-testid="stSidebar"] * {
         color: #FDFBF7 !important;
     }
 
-    /* Styling specifically for sidebar buttons */
     section[data-testid="stSidebar"] .stButton>button {
         background: rgba(253, 251, 247, 0.08) !important;
         color: #FDFBF7 !important;
@@ -147,6 +149,13 @@ def apply_custom_css():
         background: #C5A059 !important;
         color: #0B2545 !important;
         border-color: #C5A059 !important;
+    }
+
+    /* Ensure Sidebar collapse/expand button is styled and visible */
+    [data-testid="stSidebarCollapseButton"] {
+        color: #0B2545 !important;
+        background-color: #FDFBF7 !important;
+        border-radius: 50% !important;
     }
 
     .section-header {
@@ -184,7 +193,6 @@ def apply_custom_css():
 
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
     </style>
     """
     st.markdown(custom_css, unsafe_allow_html=True)
@@ -602,10 +610,10 @@ def main():
     apply_custom_css()
     init_session_state()
 
-    # Sidebar Navigation with Dedicated Buttons
+    # Left Sidebar Navigation Menu
     with st.sidebar:
         st.markdown("<h2 style='font-family:\"Playfair Display\", serif; color:#FDFBF7;'>🏛️ Navigation</h2>", unsafe_allow_html=True)
-        st.markdown("<p style='color:#C5A059; font-size:0.85rem;'>NavBlue & Cream Studio Edition</p>", unsafe_allow_html=True)
+        st.markdown("<p style='color:#C5A059; font-size:0.85rem;'>NavBlue & Cream Studio</p>", unsafe_allow_html=True)
         st.markdown("---")
 
         # Sidebar navigation buttons
