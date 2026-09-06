@@ -586,9 +586,11 @@ def main():
     apply_custom_css()
     init_session_state()
 
-    # -------------------------------------------------------------------------
-    # SIDEBAR NAVIGATION
-    # -------------------------------------------------------------------------
+    # Callback to synchronize radio button selection with session state
+    def update_navigation():
+        st.session_state["current_page"] = st.session_state["nav_selection_radio"]
+
+    # Sidebar Navigation Menu
     with st.sidebar:
         st.markdown("<h2 style='font-family:\"Playfair Display\", serif; color:#FDFBF7;'>🏛️ Navigation Menu</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color:#C5A059; font-size:0.85rem;'>NavBlue & Cream Studio Edition</p>", unsafe_allow_html=True)
@@ -598,14 +600,13 @@ def main():
         current = st.session_state.get("current_page", "Home")
         current_index = options.index(current) if current in options else 0
 
-        nav_selection = st.radio(
+        st.radio(
             "Select Page",
             options,
             index=current_index,
-            key="sidebar_navigation_radio"
+            key="nav_selection_radio",
+            on_change=update_navigation
         )
-
-        st.session_state["current_page"] = nav_selection
 
         st.markdown("---")
         st.markdown(
@@ -620,13 +621,14 @@ def main():
         )
 
     # Render selected page view
-    if st.session_state["current_page"] == "Home":
+    active_page = st.session_state.get("current_page", "Home")
+    if active_page == "Home":
         home_page()
-    elif st.session_state["current_page"] == "AI Designer":
+    elif active_page == "AI Designer":
         designer_page()
-    elif st.session_state["current_page"] == "Design Gallery":
+    elif active_page == "Design Gallery":
         gallery_page()
-    elif st.session_state["current_page"] == "About":
+    elif active_page == "About":
         about_page()
 
     st.markdown(
