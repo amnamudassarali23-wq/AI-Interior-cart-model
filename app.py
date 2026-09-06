@@ -1,18 +1,17 @@
 """
 AI Interior Designing - Transform Your Space With Artificial Intelligence
 Developer: Amna Mudassar Ali (amnamudassarali23@gmail.com)
-A SaaS-grade Streamlit web application utilizing Generative AI for interior design visualization.
+A SaaS-grade Streamlit web application utilizing AI for interior design visualization.
 """
 
 import os
 import io
 import time
-import base64
-from typing import Tuple, Dict, Any, Optional
+import requests
+from typing import Tuple, Optional
 
 import streamlit as st
-from PIL import Image
-import torch
+from PIL import Image, ImageDraw, ImageFont
 
 # -----------------------------------------------------------------------------
 # Streamlit Page Configuration
@@ -34,25 +33,21 @@ def apply_custom_css():
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
 
-    /* Color Variables: NavBlue (#0B2545), Cream (#FDFBF7), Accent Gold (#C5A059), Soft Slate (#13315C) */
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         color: #0B2545;
     }
 
-    /* Overall App Background in Soft Warm Cream */
     .stApp {
         background-color: #FDFBF7;
     }
 
-    /* Specialized Designing Background for Home Hero Banner */
     .design-hero-bg {
         position: relative;
         background: linear-gradient(135deg, rgba(11, 37, 69, 0.95) 0%, rgba(19, 49, 92, 0.92) 100%),
                     radial-gradient(circle at 50% 50%, rgba(197, 160, 89, 0.15) 0%, transparent 60%);
-        background-size: cover;
         border-radius: 24px;
-        padding: 80px 40px;
+        padding: 70px 30px;
         text-align: center;
         color: #FDFBF7;
         box-shadow: 0 20px 40px rgba(11, 37, 69, 0.15);
@@ -61,24 +56,13 @@ def apply_custom_css():
         overflow: hidden;
     }
 
-    .design-hero-bg::before {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background-image: repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(253, 251, 247, 0.04) 50px),
-                          repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(253, 251, 247, 0.04) 50px);
-        pointer-events: none;
-    }
-
-    /* Typography */
     .brand-title {
         font-family: 'Playfair Display', serif;
-        font-size: 3.8rem;
+        font-size: 3.5rem;
         font-weight: 700;
         letter-spacing: -0.02em;
         color: #FDFBF7;
         margin-bottom: 10px;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
 
     .developer-card {
@@ -86,52 +70,49 @@ def apply_custom_css():
         background: rgba(253, 251, 247, 0.12);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(197, 160, 89, 0.4);
-        padding: 16px 32px;
+        padding: 14px 28px;
         border-radius: 50px;
-        margin-top: 20px;
-        margin-bottom: 30px;
+        margin-top: 15px;
+        margin-bottom: 20px;
     }
 
     .developer-name {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         font-weight: 600;
         color: #EEF4F8;
-        letter-spacing: 0.03em;
     }
 
     .developer-email {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         color: #C5A059;
         font-weight: 500;
     }
 
-    /* Glassmorphism Cards in NavBlue/Cream context */
     .glass-card {
         background: #FFFFFF;
         border: 1px solid #EEF2F6;
         border-radius: 18px;
-        padding: 26px;
+        padding: 24px;
         box-shadow: 0 10px 25px -5px rgba(11, 37, 69, 0.05);
         margin-bottom: 24px;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
 
     .glass-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 15px 30px -5px rgba(11, 37, 69, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px -5px rgba(11, 37, 69, 0.08);
         border-color: #C5A059;
     }
 
-    /* NavBlue Primary Action Buttons */
     .stButton>button {
         background: #0B2545 !important;
         color: #FDFBF7 !important;
         border-radius: 12px !important;
-        padding: 14px 28px !important;
+        padding: 12px 24px !important;
         font-weight: 600 !important;
         font-size: 1rem !important;
         border: 1px solid #0B2545 !important;
-        box-shadow: 0 4px 14px 0 rgba(11, 37, 69, 0.2) !important;
+        box-shadow: 0 4px 14px 0 rgba(11, 37, 69, 0.15) !important;
         transition: all 0.25s ease !important;
         width: 100%;
     }
@@ -140,11 +121,9 @@ def apply_custom_css():
         background: #13315C !important;
         border-color: #C5A059 !important;
         color: #C5A059 !important;
-        box-shadow: 0 6px 20px 0 rgba(11, 37, 69, 0.3) !important;
         transform: translateY(-2px);
     }
 
-    /* Sidebar Styling - Deep NavBlue */
     section[data-testid="stSidebar"] {
         background-color: #0B2545 !important;
     }
@@ -153,53 +132,39 @@ def apply_custom_css():
         color: #FDFBF7 !important;
     }
 
-    section[data-testid="stSidebar"] .stRadio > label {
-        color: #C5A059 !important;
-    }
-
-    /* Form Controls & Inputs Styling */
-    .stSelectbox label, .stMultiSelect label, .stColorPicker label, .stTextArea label, .stNumberInput label {
-        color: #0B2545 !important;
-        font-weight: 600 !important;
-    }
-
-    /* Section Headings */
     .section-header {
         font-family: 'Playfair Display', serif;
-        font-size: 1.5rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: #0B2545;
-        margin-bottom: 18px;
+        margin-bottom: 16px;
         border-bottom: 2px solid #C5A059;
-        padding-bottom: 6px;
+        padding-bottom: 4px;
         display: inline-block;
     }
 
-    /* Custom Badges */
     .theme-badge {
         display: inline-block;
         padding: 6px 16px;
         border-radius: 20px;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         font-weight: 700;
         background: #13315C;
         color: #C5A059;
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        margin-bottom: 16px;
+        margin-bottom: 14px;
     }
 
-    /* Footer */
     .footer {
         text-align: center;
-        padding: 30px 0 15px 0;
-        font-size: 0.88rem;
+        padding: 25px 0 15px 0;
+        font-size: 0.85rem;
         color: #13315C;
         border-top: 1px solid rgba(197, 160, 89, 0.3);
-        margin-top: 60px;
+        margin-top: 50px;
     }
 
-    /* Hide Default Streamlit Chrome */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -222,37 +187,6 @@ def init_session_state():
 
 
 # -----------------------------------------------------------------------------
-# ML Model Pipeline Management (Lazy Loading & Caching)
-# -----------------------------------------------------------------------------
-@st.cache_resource(show_spinner=False)
-def load_sdxl_pipeline():
-    """Loads and caches the Stable Diffusion XL pipeline using torch best practices."""
-    try:
-        from diffusers import StableDiffusionXLPipeline, EulerDiscreteScheduler
-
-        model_id = "stabilityai/stable-diffusion-xl-base-1.0"
-        
-        device = "cuda" if torch.cuda.is_available() else "cpu"
-        torch_dtype = torch.float16 if device == "cuda" else torch.float32
-
-        pipe = StableDiffusionXLPipeline.from_pretrained(
-            model_id,
-            torch_dtype=torch_dtype,
-            use_safetensors=True,
-            variant="fp16" if device == "cuda" else None
-        )
-        pipe.scheduler = EulerDiscreteScheduler.from_config(pipe.scheduler.config)
-        pipe.to(device)
-
-        if device == "cuda":
-            pipe.enable_attention_slicing()
-
-        return pipe, device, None
-    except Exception as e:
-        return None, "cpu", str(e)
-
-
-# -----------------------------------------------------------------------------
 # Prompt Construction Engine
 # -----------------------------------------------------------------------------
 def build_design_prompt(
@@ -269,72 +203,90 @@ def build_design_prompt(
     flooring: str,
     additional_reqs: str
 ) -> Tuple[str, str]:
-    """Assembles structured inputs into an optimized, photorealistic text prompt."""
+    """Assembles structured inputs into an optimized text prompt."""
     
     if color_preset != "Custom":
         color_description = f"{color_preset.lower()} color scheme"
     else:
-        color_description = f"palette featuring primary {primary_color}, secondary {secondary_color}, and accent {accent_color}"
+        color_description = f"palette with primary {primary_color}, secondary {secondary_color}, and accent {accent_color}"
 
     furniture_str = ", ".join(furniture) if furniture else "balanced essential furniture"
 
-    # Positive Prompt
     positive_prompt = (
-        f"A photorealistic, award-winning architectural interior design photograph of a {room_size.lower()} {room_shape.lower()} {room_type.lower()}. "
+        f"A photorealistic architectural interior design photo of a {room_size.lower()} {room_shape.lower()} {room_type.lower()}. "
         f"Design Style: {style}. Color Palette: {color_description}. "
-        f"Included Furniture & Decor: {furniture_str}. Flooring: {flooring} flooring. "
-        f"Lighting: {lighting}. "
+        f"Furniture: {furniture_str}. Flooring: {flooring}. Lighting: {lighting}. "
     )
 
     if additional_reqs.strip():
-        positive_prompt += f"Specific Details: {additional_reqs.strip()}. "
+        positive_prompt += f"Details: {additional_reqs.strip()}. "
 
-    positive_prompt += (
-        "Architectural Digest style, 8k resolution, highly detailed materials, natural sunlight, depth of field, "
-        "flawless visual symmetry, volumetric lighting, interior design portfolio photograph."
-    )
+    positive_prompt += "Architectural digest, 8k resolution, realistic lighting, high detail materials."
 
-    # Negative Prompt
-    negative_prompt = (
-        "blurry, low resolution, distorted geometry, warped furniture, unrealistic architecture, "
-        "duplicate objects, oversaturated, text, watermark, logo, signature, ugly layout, human figures, "
-        "cluttered, noise, CGI artifact, bad shadows, missing limbs, draft render."
-    )
+    negative_prompt = "blurry, low quality, distorted furniture, bad perspective, watermark, clutter."
 
     return positive_prompt, negative_prompt
 
 
 # -----------------------------------------------------------------------------
-# Image Generation Pipeline Manager
+# Cloud-Safe Image Generator (HF API + Fallback Renderer)
 # -----------------------------------------------------------------------------
-def generate_interior_design(prompt: str, negative_prompt: str) -> Optional[Image.Image]:
-    """Handles execution of the text-to-image diffusion model with graceful fallback mechanisms."""
-    pipe, device, err = load_sdxl_pipeline()
+def generate_interior_design(prompt: str, hf_token: str = "") -> Image.Image:
+    """Generates an image via Hugging Face Inference API or returns an elegant design preview canvas."""
+    
+    # 1. Try Hugging Face API if Token Provided
+    if hf_token.strip():
+        try:
+            API_URL = "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0"
+            headers = {"Authorization": f"Bearer {hf_token.strip()}"}
+            payload = {"inputs": prompt}
+            
+            response = requests.post(API_URL, headers=headers, json=payload, timeout=20)
+            if response.status_code == 200:
+                image = Image.open(io.BytesIO(response.content))
+                return image
+            else:
+                st.warning(f"Hugging Face API returned status {response.status_code}. Using cloud preview mode.")
+        except Exception as e:
+            st.warning(f"API connection error: {str(e)}. Using cloud preview mode.")
 
-    if pipe is None:
-        st.warning(f"Local GPU/Model loading unavailable ({err}). Executing simulated render mode for demonstration.")
-        time.sleep(2.5)
-        placeholder_img = Image.new("RGB", (1024, 1024), color=(253, 251, 247))
-        return placeholder_img
-
-    try:
-        with torch.inference_mode():
-            result = pipe(
-                prompt=prompt,
-                negative_prompt=negative_prompt,
-                num_inference_steps=30 if device == "cuda" else 15,
-                guidance_scale=7.5,
-                width=1024,
-                height=1024
-            )
-        return result.images[0]
-    except Exception as e:
-        st.error(f"An error occurred during image generation: {str(e)}")
-        return None
+    # 2. Fast Cloud-Safe Visual Render Fallback
+    time.sleep(1.5)  # Simulate generation delay safely
+    
+    img = Image.new("RGB", (1024, 768), color=(11, 37, 69))
+    draw = ImageDraw.Draw(img)
+    
+    # Draw an architectural frame box inside
+    draw.rectangle([40, 40, 984, 728], outline=(197, 160, 89), width=3)
+    draw.rectangle([60, 60, 964, 708], fill=(253, 251, 247))
+    
+    # Text overlay
+    draw.text((100, 100), "AI INTERIOR DESIGN CONCEPT", fill=(11, 37, 69))
+    draw.text((100, 140), "--------------------------------------------------", fill=(197, 160, 89))
+    
+    # Wrap prompt text cleanly
+    words = prompt.split(" ")
+    lines, current_line = [], ""
+    for word in words:
+        if len(current_line + " " + word) < 65:
+            current_line += " " + word
+        else:
+            lines.append(current_line)
+            current_line = word
+    lines.append(current_line)
+    
+    y = 180
+    for line in lines[:10]:
+        draw.text((100, y), line.strip(), fill=(19, 49, 92))
+        y += 35
+        
+    draw.text((100, 640), "✨ Rendered in Cloud-Safe Mode | Developer: Amna Mudassar Ali", fill=(197, 160, 89))
+    
+    return img
 
 
 # -----------------------------------------------------------------------------
-# PAGE 1: HOME (Focused Landing Page with Project & Developer Info)
+# PAGE 1: HOME
 # -----------------------------------------------------------------------------
 def home_page():
     st.markdown(
@@ -342,8 +294,8 @@ def home_page():
         <div class="design-hero-bg">
             <span class="theme-badge">Architectural AI Platform</span>
             <div class="brand-title">AI Interior Designing</div>
-            <p style="font-size:1.25rem; color:#E0E6ED; max-width:700px; margin:0 auto 20px auto; font-weight:300;">
-                Transforming spatial concepts into photorealistic interior visualizations through generative artificial intelligence.
+            <p style="font-size:1.2rem; color:#E0E6ED; max-width:680px; margin:0 auto 18px auto; font-weight:300;">
+                Transforming spatial concepts into realistic interior visualizations through generative artificial intelligence.
             </p>
             <div class="developer-card">
                 <div class="developer-name">Developed by Amna Mudassar Ali</div>
@@ -362,14 +314,13 @@ def home_page():
 
     st.markdown("<br><hr style='border-color: rgba(197, 160, 89, 0.2);'><br>", unsafe_allow_html=True)
 
-    # Architectural Design Feature Cards
     f1, f2, f3 = st.columns(3)
     with f1:
         st.markdown(
             """
             <div class="glass-card">
                 <h3 style="color:#0B2545; font-family:'Playfair Display', serif;">✨ Intelligent Synthesis</h3>
-                <p style="color:#13315C; font-size:0.9rem;">Generate bespoke spatial concepts using tailored architectural diffusion pipelines.</p>
+                <p style="color:#13315C; font-size:0.9rem;">Generate bespoke spatial concepts using tailored prompt engineering.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -379,7 +330,7 @@ def home_page():
             """
             <div class="glass-card">
                 <h3 style="color:#0B2545; font-family:'Playfair Display', serif;">📐 Spatial Precision</h3>
-                <p style="color:#13315C; font-size:0.9rem;">Specify dimensions, furniture arrays, custom lighting setups, and exact color palettes.</p>
+                <p style="color:#13315C; font-size:0.9rem;">Specify room sizes, furniture arrays, custom lighting, and exact color palettes.</p>
             </div>
             """,
             unsafe_allow_html=True
@@ -401,7 +352,7 @@ def home_page():
 # -----------------------------------------------------------------------------
 def designer_page():
     st.markdown('<div class="section-header">AI Interior Studio</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#13315C; margin-bottom:24px;">Configure structural specs, materials, colors, and lighting parameters below.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#13315C; margin-bottom:20px;">Configure room parameters below to generate your design concept.</p>', unsafe_allow_html=True)
 
     col_left, col_right = st.columns([1.1, 0.9], gap="large")
 
@@ -431,7 +382,7 @@ def designer_page():
                 st.number_input("Height (ft)", min_value=7, max_value=30, value=9)
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # Section 2: Architectural Style
+        # Section 2: Interior Style
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
         st.markdown('<div class="section-header">2. Interior Style</div>', unsafe_allow_html=True)
         
@@ -452,7 +403,7 @@ def designer_page():
         st.info(f"**{style} Aesthetic:** {style_descriptions[style]}")
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # Section 3: Color Palette & Preferences
+        # Section 3: Color Palette
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
         st.markdown('<div class="section-header">3. Color Palette</div>', unsafe_allow_html=True)
         
@@ -474,7 +425,7 @@ def designer_page():
 
         # Section 4: Furniture & Fixtures
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">4. Furniture & Structural Elements</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">4. Furniture & Elements</div>', unsafe_allow_html=True)
         
         furniture_options = [
             "Sofa", "Bed", "Wardrobe", "TV Unit", "Coffee Table", "Dining Table", 
@@ -482,18 +433,18 @@ def designer_page():
             "Lamps", "Wall Art", "Mirrors", "Rugs"
         ]
         selected_furniture = st.multiselect(
-            "Select Desired Items", furniture_options, 
+            "Select Items", furniture_options, 
             default=["Sofa", "Coffee Table", "Indoor Plants", "Lamps", "Wall Art"]
         )
 
         f_col1, f_col2 = st.columns(2)
         with f_col1:
-            lighting = st.selectbox("Lighting Preference", [
+            lighting = st.selectbox("Lighting", [
                 "Warm Ambient Lighting", "Natural Sun Light", "Cool Daylight", 
                 "Luxury Chandelier", "Recessed LED Strips", "Soft Cinematic Lighting"
             ])
         with f_col2:
-            flooring = st.selectbox("Flooring Option", [
+            flooring = st.selectbox("Flooring", [
                 "Wooden Hardwood", "Marble Tile", "Polished Concrete", 
                 "Plush Carpet", "Natural Stone", "Light Oak Vinyl"
             ])
@@ -508,13 +459,12 @@ def designer_page():
         )
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # Section 6: Optional Reference Photo
+        # Section 6: Reference Photo
         st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-        st.markdown('<div class="section-header">6. Existing Room Photograph (Optional)</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">6. Existing Room Photo (Optional)</div>', unsafe_allow_html=True)
         uploaded_file = st.file_uploader("Upload reference photo", type=["jpg", "jpeg", "png"])
         st.markdown('</div>', unsafe_allow_html=True)
 
-        # Action Button
         generate_clicked = st.button("✨ Generate My Interior Design", key="gen_btn")
 
     with col_right:
@@ -527,11 +477,13 @@ def designer_page():
                 lighting, flooring, additional_reqs
             )
 
-            with st.expander("🔍 View Compiled Prompt Details", expanded=False):
-                st.code(f"POSITIVE PROMPT:\n{pos_prompt}\n\nNEGATIVE PROMPT:\n{neg_prompt}", language="text")
+            with st.expander("🔍 View Compiled Prompt", expanded=False):
+                st.code(f"POSITIVE PROMPT:\n{pos_prompt}", language="text")
 
-            with st.spinner("AI is generating your interior concept..."):
-                generated_image = generate_interior_design(pos_prompt, neg_prompt)
+            hf_token = st.session_state.get("hf_token", "")
+
+            with st.spinner("AI is rendering your interior design concept..."):
+                generated_image = generate_interior_design(pos_prompt, hf_token=hf_token)
 
             if generated_image:
                 st.session_state["last_generated"] = {
@@ -549,18 +501,18 @@ def designer_page():
             res = st.session_state["last_generated"]
             
             st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-            st.subheader("Rendered Interior Concept")
+            st.subheader("Rendered Concept")
             
             if res["uploaded_image"] is not None:
                 b_col1, b_col2 = st.columns(2)
                 with b_col1:
                     st.caption("Existing Space")
-                    st.image(res["uploaded_image"], use_column_width=True)
+                    st.image(res["uploaded_image"], use_container_width=True)
                 with b_col2:
                     st.caption("AI Concept")
-                    st.image(res["image"], use_column_width=True)
+                    st.image(res["image"], use_container_width=True)
             else:
-                st.image(res["image"], use_column_width=True)
+                st.image(res["image"], use_container_width=True)
 
             st.markdown(
                 f"""
@@ -596,7 +548,7 @@ def designer_page():
 
             st.markdown('</div>', unsafe_allow_html=True)
         else:
-            st.info("Configure your preferences on the left and click 'Generate My Interior Design' to view the concept.")
+            st.info("Configure options on the left and click 'Generate My Interior Design' to create your concept.")
 
 
 # -----------------------------------------------------------------------------
@@ -604,14 +556,14 @@ def designer_page():
 # -----------------------------------------------------------------------------
 def gallery_page():
     st.markdown('<div class="section-header">Design Gallery</div>', unsafe_allow_html=True)
-    st.markdown('<p style="color:#13315C; margin-bottom:24px;">Saved spatial visualizations created during your session.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#13315C; margin-bottom:20px;">Saved spatial visualizations created during your session.</p>', unsafe_allow_html=True)
 
     gallery = st.session_state.get("gallery", [])
 
     if not gallery:
         st.markdown(
             """
-            <div class="glass-card" style="text-align:center; padding:50px 20px;">
+            <div class="glass-card" style="text-align:center; padding:40px 20px;">
                 <h3 style="color:#0B2545;">Your Gallery is Currently Empty</h3>
                 <p style="color:#13315C;">Generate interior concepts in the studio and save them here.</p>
             </div>
@@ -628,7 +580,7 @@ def gallery_page():
         for idx, item in enumerate(gallery):
             with cols[idx % 3]:
                 st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-                st.image(item["image"], use_column_width=True)
+                st.image(item["image"], use_container_width=True)
                 st.markdown(f"**{item['style']} {item['room_type']}**")
                 st.caption(f"Lighting: {item['lighting']}")
                 st.markdown('</div>', unsafe_allow_html=True)
@@ -645,48 +597,16 @@ def about_page():
         <div class="glass-card">
             <h3 style="color:#0B2545; font-family:'Playfair Display', serif;">AI Interior Designing</h3>
             <p style="color:#13315C; line-height:1.7;">
-                <strong>AI Interior Designing</strong> is an architectural visualization platform designed to convert precise spatial 
-                inputs, palette preferences, and lighting requirements into photorealistic interior images.
+                <strong>AI Interior Designing</strong> translates physical room specs, color choices, and spatial preferences into realistic architectural concepts.
             </p>
             <hr style="border-color: rgba(197, 160, 89, 0.2);">
-            <p style="color:#0B2545; font-weight:600; margin-bottom:4px;">Lead Developer:</p>
+            <p style="color:#0B2545; font-weight:600; margin-bottom:2px;">Lead Developer:</p>
             <p style="color:#13315C; margin-bottom:2px;">Amna Mudassar Ali</p>
             <p style="color:#C5A059; font-weight:500;">amnamudassarali23@gmail.com</p>
         </div>
         """,
         unsafe_allow_html=True
     )
-
-    a1, a2 = st.columns(2)
-    with a1:
-        st.markdown(
-            """
-            <div class="glass-card">
-                <h3 style="color:#0B2545; font-family:'Playfair Display', serif;">Technical Stack</h3>
-                <ul style="color:#13315C; line-height:1.8;">
-                    <li><strong>Framework:</strong> Streamlit (Custom NavBlue & Cream Theme)</li>
-                    <li><strong>AI Engine:</strong> Stable Diffusion XL Base 1.0 (Hugging Face Diffusers)</li>
-                    <li><strong>Processing:</strong> PyTorch (CUDA Dynamic Float16 Acceleration)</li>
-                    <li><strong>Graphics:</strong> Pillow (PIL)</li>
-                </ul>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    with a2:
-        st.markdown(
-            """
-            <div class="glass-card">
-                <h3 style="color:#0B2545; font-family:'Playfair Display', serif;">Future Architecture Roadmap</h3>
-                <ul style="color:#13315C; line-height:1.8;">
-                    <li>ControlNet line/depth mapping integration.</li>
-                    <li>Object segmentation for real-time furniture replacements.</li>
-                    <li>Automated interior material cost estimations.</li>
-                </ul>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
 
 # -----------------------------------------------------------------------------
@@ -696,7 +616,6 @@ def main():
     apply_custom_css()
     init_session_state()
 
-    # Sidebar Navigation
     with st.sidebar:
         st.markdown("<h2 style='font-family:\"Playfair Display\", serif; color:#FDFBF7;'>🏛️ AI Interior</h2>", unsafe_allow_html=True)
         st.markdown("<p style='color:#C5A059; font-size:0.85rem;'>NavBlue & Cream Studio Edition</p>", unsafe_allow_html=True)
@@ -711,9 +630,13 @@ def main():
         st.session_state["current_page"] = nav_selection
 
         st.markdown("---")
+        st.markdown("<p style='font-size:0.85rem; color:#FDFBF7;'>🔑 Hugging Face API Token (Optional):</p>", unsafe_allow_html=True)
+        hf_token_input = st.text_input("HF Token", type="password", help="Enter free HuggingFace token for live SDXL cloud rendering", label_visibility="collapsed")
+        st.session_state["hf_token"] = hf_token_input
+
+        st.markdown("---")
         st.markdown("<p style='font-size:0.8rem; color:#E0E6ED;'>Developer:<br><strong>Amna Mudassar Ali</strong><br><span style='color:#C5A059;'>amnamudassarali23@gmail.com</span></p>", unsafe_allow_html=True)
 
-    # Route Page Display
     if st.session_state["current_page"] == "Home":
         home_page()
     elif st.session_state["current_page"] == "AI Designer":
@@ -723,7 +646,6 @@ def main():
     elif st.session_state["current_page"] == "About":
         about_page()
 
-    # Footer
     st.markdown(
         """
         <div class="footer">
